@@ -2,54 +2,80 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
+  static ThemeData get premiumTheme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.secondary,
+      brightness: Brightness.dark, // ✅ تغيير للوضع الداكن
+      scaffoldBackgroundColor: AppColors.night,
+
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.ocean,
+        secondary: AppColors.gold,
         surface: AppColors.surface,
-        background: AppColors.background,
+        background: AppColors.night,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: AppColors.textPrimary,
+        onBackground: AppColors.textPrimary,
       ),
-      scaffoldBackgroundColor: AppColors.background,
+
       appBarTheme: const AppBarTheme(
-        centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textWhite,
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColors.textPrimary,
+        titleTextStyle: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textPrimary,
+        ),
       ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textWhite,
+          elevation: 0,
+          backgroundColor: AppColors.ocean,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: AppColors.card, // ✅ استخدام card بدلاً من glass
+        contentPadding: const EdgeInsets.all(20),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.textSecondary),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.textSecondary),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: AppColors.ocean.withOpacity(0.3)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-      ),
-      cardTheme: CardThemeData(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.gold, width: 2),
         ),
+        labelStyle: const TextStyle(color: AppColors.textSecondary),
+        hintStyle: const TextStyle(color: AppColors.textMuted),
+      ),
+
+      cardTheme: CardThemeData(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        color: AppColors.card,
+      ),
+
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.surface,
+        selectedItemColor: AppColors.gold,
+        unselectedItemColor: AppColors.textMuted,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
