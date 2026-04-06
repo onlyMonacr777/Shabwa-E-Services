@@ -5,7 +5,7 @@ class AppTheme {
   static ThemeData get premiumTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark, // ✅ تغيير للوضع الداكن
+      brightness: Brightness.dark,  
       scaffoldBackgroundColor: AppColors.night,
 
       colorScheme: const ColorScheme.dark(
@@ -45,7 +45,7 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.card, // ✅ استخدام card بدلاً من glass
+        fillColor: AppColors.card,    
         contentPadding: const EdgeInsets.all(20),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
