@@ -219,3 +219,39 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+  // شريط البحث
+  Widget _buildSearchSliver() {
+    return SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+            // شريط البحث
+            Container(
+            height: 56,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: TextField(
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                hintTextDirection: TextDirection.rtl,
+                hintText: 'ابحث عن خدمة...',
+                prefixIcon: Icon(Icons.search,
+                    color: ShabwaColors.textSecondary),
+                suffixIcon: Icon(Icons.tune,
+                    color: ShabwaColors.primaryGreen),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
