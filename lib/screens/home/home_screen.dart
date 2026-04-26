@@ -825,3 +825,74 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController.dispose();
     _fabController.dispose();
     super.dispose();
+
+// ═══════════════════════════════════════════════════════════════
+// 3. Enums و Constants
+// ═══════════════════════════════════════════════════════════════
+    enum RequestStatus { reviewing, accepted, rejected }
+
+    class ShabwaColors {
+    static const Color primaryGreen = Color(0xFF2E7D32);
+    static const Color primaryGreenLight = Color(0xFF4CAF50);
+    static const Color secondaryBlue = Color(0xFF1976D2);
+    static const Color textSecondary = Color(0xFF757575);
+    }
+
+// ═══════════════════════════════════════════════════════════════
+// 4. شاشات أخرى (للتنقل)
+// ═══════════════════════════════════════════════════════════════
+    class ServicesScreen extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+    return Scaffold(
+    appBar: AppBar(
+    title: Text('الخدمات'),
+    backgroundColor: ShabwaColors.primaryGreen,
+    foregroundColor: Colors.white,
+    ),
+    body: Center(
+    child: Text(
+    'شاشة الخدمات',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    ),
+    ),
+    );
+    }
+    }
+
+    class NotificationsScreen extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+    return Scaffold(
+    appBar: AppBar(
+    title: Text('الإشعارات'),
+    backgroundColor: ShabwaColors.primaryGreen,
+    foregroundColor: Colors.white,
+    ),
+    body: Center(
+    child: Text(
+    'شاشة الإشعارات',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    ),
+    ),
+    );
+    }
+    }
+
+    class ProfileScreen extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+    return Scaffold(
+    appBar: AppBar(
+    title: Text('حسابي'),
+    backgroundColor: ShabwaColors.primaryGreen,
+    foregroundColor: Colors.white,
+    ),
+    body: Center(
+    child: Text(
+    'شاشة الحساب',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    ),
+    ),
+    );
+    }
