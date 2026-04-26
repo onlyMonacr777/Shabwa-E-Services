@@ -219,61 +219,62 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+
   // شريط البحث
   Widget _buildSearchSliver() {
     return SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
             // شريط البحث
             Container(
-            height: 56,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 20,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: TextField(
-              textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
-                hintTextDirection: TextDirection.rtl,
-                hintText: 'ابحث عن خدمة...',
-                prefixIcon: Icon(Icons.search,
-                    color: ShabwaColors.textSecondary),
-                suffixIcon: Icon(Icons.tune,
-                    color: ShabwaColors.primaryGreen),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 20),
+              height: 56,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 20,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-            ),
-          ),
-          SizedBox(height: 16),
-              // اقتراحات سريعة
-              SizedBox(
-                height: 48,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildSuggestionChip('بطاقة شخصية'),
-                    SizedBox(width: 12),
-                    _buildSuggestionChip('جواز سفر'),
-                    SizedBox(width: 12),
-                    _buildSuggestionChip('شهادة ميلاد'),
-                    SizedBox(width: 12),
-                    _buildSuggestionChip('ترخيص تجاري'),
-                  ],
+              child: TextField(
+                textDirection: TextDirection.rtl,
+                decoration: InputDecoration(
+                  hintTextDirection: TextDirection.rtl,
+                  hintText: 'ابحث عن خدمة...',
+                  prefixIcon: Icon(Icons.search,
+                      color: ShabwaColors.textSecondary),
+                  suffixIcon: Icon(Icons.tune,
+                      color: ShabwaColors.primaryGreen),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 16),
+            // اقتراحات سريعة
+            SizedBox(
+              height: 48,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _buildSuggestionChip('بطاقة شخصية'),
+                  SizedBox(width: 12),
+                  _buildSuggestionChip('جواز سفر'),
+                  SizedBox(width: 12),
+                  _buildSuggestionChip('شهادة ميلاد'),
+                  SizedBox(width: 12),
+                  _buildSuggestionChip('ترخيص تجاري'),
+                ],
+              ),
+            ),
+          ],
         ),
+      ),
     );
   }
 
@@ -825,74 +826,77 @@ class _HomeScreenState extends State<HomeScreen>
     _tabController.dispose();
     _fabController.dispose();
     super.dispose();
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // 3. Enums و Constants
 // ═══════════════════════════════════════════════════════════════
-    enum RequestStatus { reviewing, accepted, rejected }
+enum RequestStatus { reviewing, accepted, rejected }
 
-    class ShabwaColors {
-    static const Color primaryGreen = Color(0xFF2E7D32);
-    static const Color primaryGreenLight = Color(0xFF4CAF50);
-    static const Color secondaryBlue = Color(0xFF1976D2);
-    static const Color textSecondary = Color(0xFF757575);
-    }
+class ShabwaColors {
+  static const Color primaryGreen = Color(0xFF2E7D32);
+  static const Color primaryGreenLight = Color(0xFF4CAF50);
+  static const Color secondaryBlue = Color(0xFF1976D2);
+  static const Color textSecondary = Color(0xFF757575);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // 4. شاشات أخرى (للتنقل)
 // ═══════════════════════════════════════════════════════════════
-    class ServicesScreen extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
+class ServicesScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-    title: Text('الخدمات'),
-    backgroundColor: ShabwaColors.primaryGreen,
-    foregroundColor: Colors.white,
-    ),
-    body: Center(
-    child: Text(
-    'شاشة الخدمات',
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    ),
-    ),
+      appBar: AppBar(
+        title: Text('الخدمات'),
+        backgroundColor: ShabwaColors.primaryGreen,
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Text(
+          'شاشة الخدمات',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
-    }
-    }
+  }
+}
 
-    class NotificationsScreen extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
+class NotificationsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-    title: Text('الإشعارات'),
-    backgroundColor: ShabwaColors.primaryGreen,
-    foregroundColor: Colors.white,
-    ),
-    body: Center(
-    child: Text(
-    'شاشة الإشعارات',
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    ),
-    ),
+      appBar: AppBar(
+        title: Text('الإشعارات'),
+        backgroundColor: ShabwaColors.primaryGreen,
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Text(
+          'شاشة الإشعارات',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
-    }
-    }
+  }
+}
 
-    class ProfileScreen extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
+class ProfileScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(
-    title: Text('حسابي'),
-    backgroundColor: ShabwaColors.primaryGreen,
-    foregroundColor: Colors.white,
-    ),
-    body: Center(
-    child: Text(
-    'شاشة الحساب',
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    ),
-    ),
+      appBar: AppBar(
+        title: Text('حسابي'),
+        backgroundColor: ShabwaColors.primaryGreen,
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Text(
+          'شاشة الحساب',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
-    }
+  }
+}
