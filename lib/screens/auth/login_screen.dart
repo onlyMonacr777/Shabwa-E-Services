@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../home/home_screen.dart';
 import '../admin/admin_dashboard.dart';
 
@@ -20,14 +21,18 @@ class _LoginScreenState extends State<LoginScreen>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // ✅ ألوان حكومية خضراء موحدة
-  static const Color primaryGreen = Color(0xFF00695C);      // أخضر رئيسي
-  static const Color secondaryGreen = Color(0xFF00796B);    // أخضر ثانوي
-  static const Color darkGreen = Color(0xFF004D40);        // أخضر غامق
-  static const Color lightGreen = Color(0xFF4DB6AC);       // أخضر فاتح
-  static const Color blueAccent = Color(0xFF1976D2);       // أزرق حكومي
-  static const Color white = Color(0xFFFAFAFA);            // أبيض
-  static const Color darkGrey = Color(0xFF263238);         // رمادي
+  // 🔥 نفس ألوان الـ Splash بالضبط 🟢
+  static const Color primaryGreenDark = Color(0xFF022C22);
+  static const Color primaryGreen = Color(0xFF047857);
+  static const Color primaryGreenLight = Color(0xFF059669);
+  static const Color emeraldLight = Color(0xFF10B981);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color emeraldDark = Color(0xFF065F46);
+  static const Color primaryGreenExtraDark = Color(0xFF013A2E);
+
+  // 🔥 ألوان المشرف (مُحسَّنة لتتناسب مع الـ Splash)
+  static const Color adminYellowDark = Color(0xFFF59D26);
+  static const Color adminOrange = Color(0xFFEA7D1A);
 
   @override
   void initState() {
@@ -55,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen>
     }
 
     setState(() => _isLoading = true);
-
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {
@@ -74,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen>
         if (_phoneController.text == '966501234567' && _passwordController.text == '123456') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) =>  LoginScreen()),
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
           );
         } else {
           _showSnackBar('رقم الهاتف أو كلمة المرور غير صحيحة');
@@ -86,8 +90,12 @@ class _LoginScreenState extends State<LoginScreen>
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: primaryGreen,
+        content: Text(
+          message,
+          style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+          textDirection: TextDirection.rtl,
+        ),
+        backgroundColor: _isAdmin ? adminYellowDark : primaryGreen,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -98,16 +106,18 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        // 🔥 نفس الـ Gradient من الـ Splash بالضبط
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              lightGreen.withOpacity(0.9),
-              secondaryGreen.withOpacity(0.7),
-              primaryGreen.withOpacity(0.4),
-            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: const [0.0, 0.6, 1.0],
+            colors: [
+              primaryGreenExtraDark,
+              primaryGreenDark,
+              primaryGreenDark,
+              const Color(0xFF065F46),
+              primaryGreen,
+            ],
           ),
         ),
         child: SafeArea(
@@ -140,50 +150,47 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildHeader() {
     return Column(
       children: [
+        // 🔥 نفس اللوجو بس أصغر شوية
         Container(
           width: 90,
           height: 90,
           decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [white, lightGreen.withOpacity(0.8)],
+            gradient: LinearGradient(
+              colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
             ),
             shape: BoxShape.circle,
+            border: Border.all(color: white.withOpacity(0.6), width: 3),
             boxShadow: [
               BoxShadow(
-                color: primaryGreen.withOpacity(0.3),
-                blurRadius: 25,
-                spreadRadius: 5,
+                color: primaryGreenDark.withOpacity(0.7),
+                blurRadius: 60,
+                spreadRadius: 0,
               ),
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.account_balance,
-            color: primaryGreen,
+            color: white,
             size: 45,
-            shadows: [
-              Shadow(
-                color: Colors.black26,
-                offset: Offset(0, 2),
-                blurRadius: 4,
-              ),
-            ],
           ),
         ),
         const SizedBox(height: 16),
         Text(
           'الخدمات الحكومية',
-          style: TextStyle(
+          style: GoogleFonts.cairo(
             fontSize: 22,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w900,
             color: white,
+            height: 1.2,
             shadows: [
               Shadow(
-                color: primaryGreen.withOpacity(0.5),
-                offset: Offset(0, 2),
-                blurRadius: 4,
+                color: primaryGreenDark,
+                offset: const Offset(0, 8),
+                blurRadius: 24,
               ),
             ],
           ),
+          textDirection: TextDirection.rtl,
         ),
       ],
     );
@@ -191,37 +198,36 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildUserTypeSelector() {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: primaryGreen.withOpacity(0.2), width: 1),
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: white.withOpacity(0.6), width: 2),
         boxShadow: [
           BoxShadow(
-            color: primaryGreen.withOpacity(0.15),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: primaryGreenDark.withOpacity(0.7),
+            blurRadius: 60,
+            spreadRadius: 0,
           ),
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildUserTypeButton(
+            title: 'مواطن',
+            icon: Icons.person,
+            color: primaryGreen,
             isSelected: !_isAdmin,
-            icon: Icons.person_outline,
-            label: 'مواطن',
-            gradient: const LinearGradient(
-              colors: [primaryGreen, secondaryGreen],
-            ),
             onTap: () => setState(() => _isAdmin = false),
           ),
           _buildUserTypeButton(
+            title: 'مشرف',
+            icon: Icons.admin_panel_settings,
+            color: adminYellowDark,
             isSelected: _isAdmin,
-            icon: Icons.admin_panel_settings_outlined,
-            label: 'مشرف',
-            gradient: const LinearGradient(
-              colors: [darkGreen, primaryGreen],
-            ),
             onTap: () => setState(() => _isAdmin = true),
           ),
         ],
@@ -230,179 +236,113 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildUserTypeButton({
-    required bool isSelected,
+    required String title,
     required IconData icon,
-    required String label,
-    required Gradient gradient,
+    required Color color,
+    required bool isSelected,
     required VoidCallback onTap,
   }) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-          decoration: BoxDecoration(
-            gradient: isSelected ? gradient : null,
-            color: isSelected ? null : white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: isSelected
-                ? [
-              BoxShadow(
-                color: primaryGreen.withOpacity(0.4),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ]
-                : null,
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? LinearGradient(colors: [color.withOpacity(0.3), color.withOpacity(0.1)])
+              : null,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? white.withOpacity(0.6) : Colors.transparent,
+            width: 2,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: isSelected ? white : primaryGreen,
-                size: 22,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: white, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: GoogleFonts.cairo(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: white.withOpacity(isSelected ? 1.0 : 0.85),
               ),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: isSelected ? white : primaryGreen,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
+              textDirection: TextDirection.rtl,
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildLoginForm() {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: white.withOpacity(0.95),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: primaryGreen.withOpacity(0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: primaryGreen.withOpacity(0.15),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(
-            _isAdmin ? 'دخول المشرفين' : 'دخول المواطنين',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              color: _isAdmin ? darkGreen : primaryGreen,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'أدخل بياناتك للمتابعة',
-            style: TextStyle(
-              color: darkGrey,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 32),
-          _buildTextField(
-            controller: _phoneController,
-            hint: 'رقم الهاتف',
-            icon: Icons.phone_outlined,
-            keyboardType: TextInputType.phone,
-          ),
-          const SizedBox(height: 20),
-          _buildTextField(
-            controller: _passwordController,
-            hint: 'كلمة المرور',
-            icon: Icons.lock_outlined,
-            obscureText: true,
-          ),
-          const SizedBox(height: 16),
-          _buildForgotPassword(),
-          const SizedBox(height: 32),
-          _buildLoginButton(), // ✅ زر واضح غير شفاف
-        ],
-      ),
+    return Column(
+      children: [
+        _buildTextField(
+          controller: _phoneController,
+          label: 'رقم الهاتف',
+          icon: Icons.phone,
+          keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 20),
+        _buildTextField(
+          controller: _passwordController,
+          label: 'كلمة المرور',
+          icon: Icons.lock_outline,
+          obscureText: true,
+        ),
+        const SizedBox(height: 32),
+        _buildLoginButton(),
+      ],
     );
   }
 
   Widget _buildTextField({
     required TextEditingController controller,
-    required String hint,
+    required String label,
     required IconData icon,
-    TextInputType? keyboardType,
     bool obscureText = false,
+    TextInputType? keyboardType,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: (_isAdmin ? darkGreen : primaryGreen).withOpacity(0.3),
-          width: 1.5,
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
         ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: white.withOpacity(0.6), width: 2),
         boxShadow: [
           BoxShadow(
-            color: (_isAdmin ? darkGreen : primaryGreen).withOpacity(0.1),
-            blurRadius: 10,
+            color: primaryGreenDark.withOpacity(0.7),
+            blurRadius: 60,
+            spreadRadius: 0,
           ),
         ],
       ),
       child: TextField(
         controller: controller,
-        keyboardType: keyboardType,
         obscureText: obscureText,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        keyboardType: keyboardType,
+        textDirection: TextDirection.rtl,
+        style: GoogleFonts.cairo(color: white, fontSize: 18),
         decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            color: Colors.grey.shade500,
-            fontSize: 15,
+          labelText: label,
+          labelStyle: GoogleFonts.cairo(
+            color: white.withOpacity(0.7),
+            fontSize: 16,
           ),
-          prefixIcon: Icon(
-            icon,
-            color: _isAdmin ? darkGreen : primaryGreen,
-            size: 22,
-          ),
+          prefixIcon: Icon(icon, color: white.withOpacity(0.8), size: 24),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          filled: true,
+          fillColor: Colors.transparent,
         ),
       ),
     );
   }
 
-  Widget _buildForgotPassword() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: () {},
-        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-        child: Text(
-          'نسيت كلمة المرور؟',
-          style: TextStyle(
-            color: _isAdmin ? darkGreen : primaryGreen,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ✅ زر تسجيل دخول واضح غير شفاف - لون أخضر حكومي قوي
   Widget _buildLoginButton() {
     return Container(
       width: double.infinity,
@@ -410,16 +350,16 @@ class _LoginScreenState extends State<LoginScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: _isAdmin
-              ? [darkGreen, primaryGreen]      // مشرف: أخضر غامق → أخضر رئيسي
-              : [primaryGreen, secondaryGreen], // مواطن: أخضر رئيسي → ثانوي
+              ? [adminOrange, adminYellowDark]
+              : [primaryGreenDark, primaryGreen],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: primaryGreen.withOpacity(0.5),
-            blurRadius: 20,
+            color: _isAdmin ? adminYellowDark.withOpacity(0.6) : emeraldLight.withOpacity(0.7),
+            blurRadius: 25,
             offset: const Offset(0, 10),
             spreadRadius: 2,
           ),
@@ -436,28 +376,23 @@ class _LoginScreenState extends State<LoginScreen>
                 ? const SizedBox(
               width: 28,
               height: 28,
-              child: CircularProgressIndicator(
-                color: white,
-                strokeWidth: 2.5,
-              ),
+              child: CircularProgressIndicator(color: white, strokeWidth: 2.5),
             )
                 : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  _isAdmin ? Icons.admin_panel_settings : Icons.login,
-                  color: white,
-                  size: 24,
-                ),
+                Icon(_isAdmin ? Icons.admin_panel_settings : Icons.login,
+                    color: white, size: 24),
                 const SizedBox(width: 12),
-                const Text(
+                Text(
                   'تسجيل الدخول',
-                  style: TextStyle(
+                  style: GoogleFonts.cairo(
                     color: white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,
                   ),
+                  textDirection: TextDirection.rtl,
                 ),
               ],
             ),
@@ -473,22 +408,20 @@ class _LoginScreenState extends State<LoginScreen>
       children: [
         Text(
           'ليس لديك حساب؟ ',
-          style: TextStyle(
-            color: darkGrey,
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
+          style: GoogleFonts.cairo(
+            color: white.withOpacity(0.8),
+            fontSize: 16,
           ),
+          textDirection: TextDirection.rtl,
         ),
-        TextButton(
-          onPressed: () {},
-          style: TextButton.styleFrom(padding: EdgeInsets.zero),
+        GestureDetector(
+          onTap: () {},
           child: Text(
-            'سجل الآن',
-            style: TextStyle(
-              color: primaryGreen,
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              decoration: TextDecoration.underline,
+            'إنشاء حساب جديد',
+            style: GoogleFonts.cairo(
+              color: emeraldLight,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
