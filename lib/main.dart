@@ -36,10 +36,10 @@ class PreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, Widget>> screens = [
-    //  {'name': SplashScreen(), 'widget': const SplashScreen()},
-    //  {'name': LoginScreen(), 'widget': const LoginScreen()},
+     {'name': SplashScreen(), 'widget':  SplashScreen()},
+     {'name': LoginScreen(), 'widget':  LoginScreen()},
     //  {'name': RegisterScreen(), 'widget': const RegisterScreen()},
-     {'name': ShabwaApp(), 'widget':  ShabwaApp()},
+     //{'name': GovShabwaApp(), 'widget':  GovShabwaApp()},
       {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
    //   {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
       {'name': AdminDashboard(), 'widget': const AdminDashboard()},
