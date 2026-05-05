@@ -289,6 +289,243 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
+  Widget _buildRegisterForm() {
+    return Column(
+      children: [
+        _buildTextField(
+          controller: _fullNameController,
+          label: 'الاسم الكامل',
+          icon: Icons.person_outline,
+        ),
+        const SizedBox(height: 12),
+        _buildTextField(
+          controller: _phoneController,
+          label: 'رقم الهاتف',
+          icon: Icons.phone,
+          keyboardType: TextInputType.phone,
+        ),
+        const SizedBox(height: 12),
+        _buildTextField(
+          controller: _emailController,
+          label: 'البريد الإلكتروني',
+          icon: Icons.email_outlined,
+          keyboardType: TextInputType.emailAddress,
+        ),
+        const SizedBox(height: 12),
+        _buildPasswordField(
+          controller: _passwordController,
+          label: 'كلمة المرور',
+          icon: Icons.lock_outline,
+          isVisible: _isPasswordVisible,
+          onVisibilityChanged: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+        ),
+        const SizedBox(height: 12),
+        _buildPasswordField(
+          controller: _confirmPasswordController,
+          label: 'تأكيد كلمة المرور',
+          icon: Icons.lock_outline,
+          isVisible: _isConfirmPasswordVisible,
+          onVisibilityChanged: () => setState(() => _isConfirmPasswordVisible = !_isConfirmPasswordVisible),
+        ),
+        const SizedBox(height: 24),
+        _buildRegisterButton(),
+      ],
+    );
+  }
 
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool obscureText = false,
+    TextInputType? keyboardType,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: white.withOpacity(0.6), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: primaryGreenDark.withOpacity(0.5),
+            blurRadius: 40,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        textDirection: TextDirection.rtl,
+        style: GoogleFonts.cairo(color: white, fontSize: 16),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: GoogleFonts.cairo(
+            color: white.withOpacity(0.7),
+            fontSize: 14,
+          ),
+          prefixIcon: Icon(icon, color: white.withOpacity(0.8), size: 20),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          filled: true,
+          fillColor: Colors.transparent,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    required bool isVisible,
+    required VoidCallback onVisibilityChanged,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: white.withOpacity(0.6), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: primaryGreenDark.withOpacity(0.5),
+            blurRadius: 40,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: !isVisible,
+        textDirection: TextDirection.rtl,
+        style: GoogleFonts.cairo(color: white, fontSize: 16),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: GoogleFonts.cairo(
+            color: white.withOpacity(0.7),
+            fontSize: 14,
+          ),
+          prefixIcon: Icon(icon, color: white.withOpacity(0.8), size: 20),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isVisible ? Icons.visibility : Icons.visibility_off,
+              color: white.withOpacity(0.8),
+            ),
+            onPressed: onVisibilityChanged,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          filled: true,
+          fillColor: Colors.transparent,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRegisterButton() {
+    return Container(
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: _isAdmin
+              ? [adminOrange, adminYellowDark]
+              : [primaryGreenDark, primaryGreen],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: _isAdmin ? adminYellowDark.withOpacity(0.6) : emeraldLight.withOpacity(0.7),
+            blurRadius: 25,
+            offset: const Offset(0, 10),
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: _isLoading ? null : _register,
+          splashColor: Colors.white.withOpacity(0.3),
+          child: Center(
+            child: _isLoading
+                ? const SizedBox(
+              width: 28,
+              height: 28,
+              child: CircularProgressIndicator(color: white, strokeWidth: 2.5),
+            )
+                : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(_isAdmin ? Icons.admin_panel_settings : Icons.person_add,
+                    color: white, size: 24),
+                const SizedBox(width: 12),
+                Text(
+                  'إنشاء الحساب',
+                  style: GoogleFonts.cairo(
+                    color: white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                  textDirection: TextDirection.rtl,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
+          },
+          child: Text(
+            'لديك حساب بالفعل؟',
+            style: GoogleFonts.cairo(
+              color: emeraldLight,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Text(
+          ' تسجيل الدخول ',
+          style: GoogleFonts.cairo(
+            color: white.withOpacity(0.8),
+            fontSize: 16,
+          ),
+          textDirection: TextDirection.rtl,
+        ),
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _fullNameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 }
