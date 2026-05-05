@@ -39,7 +39,7 @@ class PreviewScreen extends StatelessWidget {
      {'name': SplashScreen(), 'widget':  SplashScreen()},
      {'name': LoginScreen(), 'widget':  LoginScreen()},
     //  {'name': RegisterScreen(), 'widget': const RegisterScreen()},
-     //{'name': GovShabwaApp(), 'widget':  GovShabwaApp()},
+     {'name': HomeScreen(), 'widget':  HomeScreen()},
       {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
    //   {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
       {'name': AdminDashboard(), 'widget': const AdminDashboard()},
