@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-import 'package:shabwa_e_services/screens/auth/login_screen.dart';
+
+
+import '../auth/register_screen.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -62,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen>
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => RegisterScreen()),
         );
       }
     });

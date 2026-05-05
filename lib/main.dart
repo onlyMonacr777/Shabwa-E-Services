@@ -38,10 +38,10 @@ class PreviewScreen extends StatelessWidget {
     final List<Map<String, Widget>> screens = [
      {'name': SplashScreen(), 'widget':  SplashScreen()},
      {'name': LoginScreen(), 'widget':  LoginScreen()},
-    //  {'name': RegisterScreen(), 'widget': const RegisterScreen()},
-     {'name': HomeScreen(), 'widget':  HomeScreen()},
+     {'name': RegisterScreen(), 'widget': const RegisterScreen()},
+    // {'name': HomeScreen(), 'widget':  HomeScreen()},
       {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
-   //   {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
+   // {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
       {'name': AdminDashboard(), 'widget': const AdminDashboard()},
     ];
 
