@@ -91,5 +91,204 @@ class _RegisterScreenState extends State<RegisterScreen>
     }
   }
 
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+          textDirection: TextDirection.rtl,
+        ),
+        backgroundColor: _isAdmin ? adminYellowDark : primaryGreen,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              primaryGreenExtraDark,
+              primaryGreenDark,
+              primaryGreenDark,
+              const Color(0xFF065F46),
+              primaryGreen,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    _buildHeader(),
+                    const SizedBox(height: 16),
+                    _buildUserTypeSelector(),
+                    const SizedBox(height: 24),
+                    _buildRegisterForm(),
+                    const SizedBox(height: 20),
+                    _buildLoginLink(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Container(
+          width: 90,
+          height: 90,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+            ),
+            shape: BoxShape.circle,
+            border: Border.all(color: white.withOpacity(0.6), width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: primaryGreenDark.withOpacity(0.7),
+                blurRadius: 60,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: Icon(
+            Icons.person_add,
+            color: white,
+            size: 45,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'إنشاء حساب جديد',
+          style: GoogleFonts.cairo(
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
+            color: white,
+            height: 1.2,
+            shadows: [
+              Shadow(
+                color: primaryGreenDark,
+                offset: const Offset(0, 8),
+                blurRadius: 24,
+              ),
+            ],
+          ),
+          textDirection: TextDirection.rtl,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'الخدمات الحكومية',
+          style: GoogleFonts.cairo(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: white.withOpacity(0.9),
+          ),
+          textDirection: TextDirection.rtl,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUserTypeSelector() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: white.withOpacity(0.6), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: primaryGreenDark.withOpacity(0.5),
+            blurRadius: 40,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildUserTypeButton(
+            title: 'مواطن',
+            icon: Icons.person,
+            color: primaryGreen,
+            isSelected: !_isAdmin,
+            onTap: () => setState(() => _isAdmin = false),
+          ),
+          _buildUserTypeButton(
+            title: 'مشرف',
+            icon: Icons.admin_panel_settings,
+            color: adminYellowDark,
+            isSelected: _isAdmin,
+            onTap: () => setState(() => _isAdmin = true),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserTypeButton({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? LinearGradient(colors: [color.withOpacity(0.3), color.withOpacity(0.1)])
+              : null,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? white.withOpacity(0.6) : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: white, size: 22),
+            const SizedBox(height: 6),
+            Text(
+              title,
+              style: GoogleFonts.cairo(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: white.withOpacity(isSelected ? 1.0 : 0.85),
+              ),
+              textDirection: TextDirection.rtl,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
   }
 }
