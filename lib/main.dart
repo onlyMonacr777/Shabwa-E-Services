@@ -41,7 +41,7 @@ class PreviewScreen extends StatelessWidget {
      {'name': RegisterScreen(), 'widget': const RegisterScreen()},
     // {'name': HomeScreen(), 'widget':  HomeScreen()},
       {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
-   // {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
+    {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
       {'name': AdminDashboard(), 'widget': const AdminDashboard()},
     ];
 
