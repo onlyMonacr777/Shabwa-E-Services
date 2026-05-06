@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'service_details_screen.dart';
 
 class ServicesListScreen extends StatefulWidget {
@@ -14,21 +15,25 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
   String _selectedCategory = 'الكل';
   late AnimationController _animationController;
 
-  // ===== ألوان: أخضر أساسي + أبيض + ذهبي =====
-  static const Color greenMain     = Color(0xFF1B5E3F);   // أخضر رئيسي — كل الشاشة
-  static const Color greenDark     = Color(0xFF144D33);   // أخضر داكن
-  static const Color greenDarker   = Color(0xFF0F3D28);   // أخضر أغمق
-  static const Color greenLight    = Color(0xFF2E8B5E);   // أخضر فاتح
-  static const Color greenSoft     = Color(0xFF3D9E6E);   // أخضر ناعم
-  static const Color white         = Color(0xFFFFFFFF);   // أبيض
-  static const Color whiteSoft     = Color(0xFFF5FAF7);   // أبيض-أخضر
-  static const Color goldPrimary   = Color(0xFFD4AF37);   // ذهبي
-  static const Color goldLight     = Color(0xFFF0D878);   // ذهبي فاتح
-  static const Color goldBg        = Color(0xFFFFF8E1);   // خلفية ذهبية فاتحة
-  static const Color textDark      = Color(0xFF1A1A1A);   // نصوص داكنة
-  static const Color textMedium    = Color(0xFF4A4A4A);   // نصوص متوسطة
-  static const Color textLight     = Color(0xFF8A9A8E);   // نصوص خفيفة
-  static const Color borderGreen   = Color(0xFFD0E8D8);   // حدود خضراء خفيفة
+  // 🔥 نفس ألوان اللوجن بالضبط 🟢
+  static const Color primaryGreenDark = Color(0xFF022C22);
+  static const Color primaryGreen = Color(0xFF014230);
+  static const Color primaryGreenLight = Color(0xFF059669);
+  static const Color emeraldLight = Color(0xFF04533D);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color emeraldDark = Color(0xFF065F46);
+  static const Color primaryGreenExtraDark = Color(0xFF013A2E);
+
+  // 🔥 ألوان المشرف (مُحسَّنة لتتناسب مع الـ Splash)
+  static const Color adminYellowDark = Color(0xFFF59D26);
+  static const Color adminOrange = Color(0xFFEA7D1A);
+
+  // ألوان إضافية مُحسَّنة للخدمات
+  static const Color cardWhite = Color(0xFFF8FAFC);
+  static const Color textDark = Color(0xFF1A202C);
+  static const Color textMedium = Color(0xFF4A5568);
+  static const Color textLight = Color(0xFFA0AEC0);
+  static const Color borderLight = Color(0xFFE2E8F0);
 
   final List<Map<String, dynamic>> categories = [
     {'name': 'الكل', 'icon': Icons.grid_view_rounded},
@@ -40,12 +45,12 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
     {'name': 'التجارة', 'icon': Icons.business_center},
   ];
 
+  // ===== قائمة الخدمات بدون حقل image (سيتم إنشاؤه تلقائياً) =====
   final List<Map<String, dynamic>> services = [
     {
       'title': 'استخراج جواز سفر',
       'category': 'الجوازات',
       'description': 'تقديم طلب استخراج جواز سفر جديد أو تجديد',
-      'image': 'assets/images/passport.jpg',
       'price': '15,000',
       'currency': 'ر.ي',
       'time': '3 أيام',
@@ -55,7 +60,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'تجديد جواز سفر',
       'category': 'الجوازات',
       'description': 'تجديد جواز السفر منتهي الصلاحية',
-      'image': 'assets/images/renew_passport.jpg',
       'price': '12,000',
       'currency': 'ر.ي',
       'time': '2 أيام',
@@ -65,7 +69,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'استخراج بطاقة شخصية',
       'category': 'الأحوال المدنية',
       'description': 'طلب استخراج بطاقة هوية وطنية جديدة',
-      'image': 'assets/images/id_card.jpg',
       'price': '5,000',
       'currency': 'ر.ي',
       'time': '5 أيام',
@@ -75,7 +78,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'ترخيص تجاري',
       'category': 'التجارة',
       'description': 'استخراج ترخيص مزاولة النشاط التجاري',
-      'image': 'assets/images/license.jpg',
       'price': '25,000',
       'currency': 'ر.ي',
       'time': '7 أيام',
@@ -85,7 +87,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'تسجيل مركبة',
       'category': 'المرور',
       'description': 'تسجيل مركبة جديدة أو نقل ملكية',
-      'image': 'assets/images/car.jpg',
       'price': '20,000',
       'currency': 'ر.ي',
       'time': '4 أيام',
@@ -95,7 +96,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'شهادة صحية',
       'category': 'الصحة',
       'description': 'استخراج شهادة صحية للعمل أو السفر',
-      'image': 'assets/images/health.jpg',
       'price': '3,000',
       'currency': 'ر.ي',
       'time': '1 يوم',
@@ -105,7 +105,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'شهادة ميلاد',
       'category': 'الأحوال المدنية',
       'description': 'استخراج شهادة ميلاد أو توثيقها',
-      'image': 'assets/images/birth.jpg',
       'price': '2,000',
       'currency': 'ر.ي',
       'time': '2 أيام',
@@ -115,7 +114,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
       'title': 'تصديق شهادة دراسية',
       'category': 'التعليم',
       'description': 'تصديق الشهادات الدراسية من الجامعات',
-      'image': 'assets/images/education.jpg',
       'price': '8,000',
       'currency': 'ر.ي',
       'time': '3 أيام',
@@ -152,65 +150,86 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greenMain,
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(child: _buildHeader()),
-            SliverToBoxAdapter(child: _buildSearchBar()),
-            SliverToBoxAdapter(child: _buildCategories()),
-            SliverToBoxAdapter(child: _buildSectionTitle()),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.72,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildServiceCard(filteredServices[index], index),
-                  childCount: filteredServices.length,
+      body: Container(
+        // 🔥 نفس الـ Gradient من اللوجن بالضبط
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              primaryGreenExtraDark,
+              primaryGreenDark,
+              primaryGreenDark,
+              emeraldDark,
+              primaryGreen,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(child: _buildHeader()),
+              SliverToBoxAdapter(child: _buildSearchBar()),
+              SliverToBoxAdapter(child: _buildCategories()),
+              SliverToBoxAdapter(child: _buildSectionTitle()),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.72,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                        (context, index) => _buildServiceCard(filteredServices[index], index),
+                    childCount: filteredServices.length,
+                  ),
                 ),
               ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
 
-  // ===== الهيدر الجديد — أبيض مع منحنى =====
   Widget _buildHeader() {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // صف الترحيب
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // زر الإشعارات
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: goldPrimary.withOpacity(0.4)),
+                  gradient: LinearGradient(
+                    colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: white.withOpacity(0.6), width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryGreenDark.withOpacity(0.7),
+                      blurRadius: 60,
+                      spreadRadius: 0,
+                    ),
+                  ],
                 ),
                 child: Stack(
                   children: [
-                    const Icon(Icons.notifications_outlined, color: goldPrimary, size: 22),
+                    Icon(Icons.notifications_outlined, color: emeraldLight, size: 24),
                     Positioned(
-                      right: 0,
-                      top: 0,
+                      right: 4,
+                      top: 4,
                       child: Container(
-                        width: 8,
-                        height: 8,
+                        width: 10,
+                        height: 10,
                         decoration: const BoxDecoration(
                           color: Colors.redAccent,
                           shape: BoxShape.circle,
@@ -220,38 +239,49 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
                   ],
                 ),
               ),
-              // مرحباً + اسم العميل
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'مرحباً، أحمد',
-                    style: TextStyle(
+                    style: GoogleFonts.cairo(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
                       color: white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      height: 1.2,
                     ),
+                    textDirection: TextDirection.rtl,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'سعيد بعودتك مرة أخرى',
-                    style: TextStyle(
-                      color: white.withOpacity(0.8),
-                      fontSize: 13,
+                    style: GoogleFonts.cairo(
+                      color: white.withOpacity(0.9),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
+                    textDirection: TextDirection.rtl,
                   ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          // كرت الإحصائيات — أبيض
+          const SizedBox(height: 24),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: white,
+              gradient: LinearGradient(
+                colors: [white.withOpacity(0.25), white.withOpacity(0.15)],
+              ),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: goldPrimary.withOpacity(0.3)),
+              border: Border.all(color: white.withOpacity(0.6), width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: primaryGreenDark.withOpacity(0.7),
+                  blurRadius: 60,
+                  spreadRadius: 0,
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -260,45 +290,46 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: goldBg,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: goldPrimary.withOpacity(0.3)),
+                        gradient: LinearGradient(colors: [emeraldLight.withOpacity(0.3), emeraldLight.withOpacity(0.1)]),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: emeraldLight.withOpacity(0.5), width: 1),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'جديد',
-                            style: TextStyle(
-                              color: goldPrimary,
-                              fontSize: 11,
+                            style: GoogleFonts.cairo(
+                              color: white,
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 4),
-                          Icon(Icons.circle, color: goldPrimary, size: 6),
+                          const SizedBox(width: 6),
+                          Icon(Icons.circle, color: white, size: 8),
                         ],
                       ),
                     ),
-                    const Text(
+                    Text(
                       'إحصائيات طلباتك',
-                      style: TextStyle(
-                        color: textDark,
-                        fontSize: 16,
+                      style: GoogleFonts.cairo(
+                        color: white,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
+                      textDirection: TextDirection.rtl,
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(child: _statItem('طلباتي', '3', Icons.folder_open_outlined)),
-                    Container(width: 1, height: 40, color: borderGreen),
+                    Container(width: 1, height: 50, color: white.withOpacity(0.3)),
                     Expanded(child: _statItem('مكتملة', '1', Icons.check_circle_outline)),
-                    Container(width: 1, height: 40, color: borderGreen),
+                    Container(width: 1, height: 50, color: white.withOpacity(0.3)),
                     Expanded(child: _statItem('قيد المراجعة', '2', Icons.access_time)),
                   ],
                 ),
@@ -313,80 +344,95 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
   Widget _statItem(String label, String value, IconData icon) {
     return Column(
       children: [
-        Icon(icon, color: greenMain, size: 20),
-        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [emeraldLight.withOpacity(0.3), primaryGreenLight.withOpacity(0.2)]),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: white, size: 22),
+        ),
+        const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(
-            color: textDark,
-            fontSize: 18,
+          style: GoogleFonts.cairo(
+            color: white,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: textLight,
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
+          style: GoogleFonts.cairo(
+            color: white.withOpacity(0.9),
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
           ),
+          textDirection: TextDirection.rtl,
         ),
       ],
     );
   }
 
-  // ===== شريط البحث — أبيض =====
   Widget _buildSearchBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
         decoration: BoxDecoration(
-          color: white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: borderGreen),
+          gradient: LinearGradient(
+            colors: [white.withOpacity(0.25), white.withOpacity(0.15)],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: white.withOpacity(0.6), width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: primaryGreenDark.withOpacity(0.7),
+              blurRadius: 60,
+              spreadRadius: 0,
+            ),
+          ],
         ),
         child: TextField(
           textAlign: TextAlign.right,
-          style: const TextStyle(color: textDark, fontSize: 14),
+          style: GoogleFonts.cairo(color: white, fontSize: 16),
           onChanged: (value) => setState(() => _searchQuery = value),
           decoration: InputDecoration(
             hintText: 'ابحث عن خدمة حكومية...',
-            hintStyle: TextStyle(
-              color: textLight.withOpacity(0.6),
-              fontSize: 13,
+            hintStyle: GoogleFonts.cairo(
+              color: white.withOpacity(0.7),
+              fontSize: 14,
             ),
             prefixIcon: Container(
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: whiteSoft,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: borderGreen),
+                color: white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.search, color: greenMain, size: 18),
+              child: Icon(Icons.search, color: white.withOpacity(0.9), size: 20),
             ),
             suffixIcon: Container(
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: goldBg,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: goldPrimary.withOpacity(0.3)),
+                gradient: LinearGradient(colors: [emeraldLight.withOpacity(0.4), primaryGreenLight.withOpacity(0.2)]),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.tune, color: goldPrimary, size: 18),
+              child: Icon(Icons.tune, color: white, size: 20),
             ),
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           ),
         ),
       ),
     );
   }
 
-  // ===== التصنيفات =====
   Widget _buildCategories() {
     return Container(
-      height: 90,
+      height: 100,
       margin: const EdgeInsets.only(top: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -399,35 +445,43 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
           return GestureDetector(
             onTap: () => setState(() => _selectedCategory = category['name']),
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.only(left: 10),
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.only(left: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                gradient: isSelected
+                    ? LinearGradient(colors: [emeraldLight.withOpacity(0.4), primaryGreenLight.withOpacity(0.2)])
+                    : LinearGradient(colors: [white.withOpacity(0.2), white.withOpacity(0.1)]),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected ? emeraldLight : white.withOpacity(0.4),
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryGreenDark.withOpacity(isSelected ? 0.5 : 0.3),
+                    blurRadius: 20,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: isSelected ? white : white.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: isSelected ? goldPrimary : white.withOpacity(0.3),
-                        width: isSelected ? 2 : 1,
-                      ),
-                    ),
-                    child: Icon(
-                      category['icon'],
-                      color: isSelected ? greenMain : white,
-                      size: 24,
-                    ),
+                  Icon(
+                    category['icon'],
+                    color: isSelected ? white : white.withOpacity(0.9),
+                    size: 26,
                   ),
                   const SizedBox(height: 6),
                   Text(
                     category['name'],
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                      color: isSelected ? goldPrimary : white,
+                    style: GoogleFonts.cairo(
+                      fontSize: 12,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                      color: isSelected ? white : white.withOpacity(0.9),
                     ),
+                    textDirection: TextDirection.rtl,
                   ),
                 ],
               ),
@@ -438,50 +492,59 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
     );
   }
 
-  // ===== عنوان القسم =====
   Widget _buildSectionTitle() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: goldPrimary.withOpacity(0.3)),
+              gradient: LinearGradient(colors: [emeraldLight.withOpacity(0.4), primaryGreenLight.withOpacity(0.2)]),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: emeraldLight.withOpacity(0.6)),
             ),
             child: Text(
               '${filteredServices.length} خدمة',
-              style: const TextStyle(
-                fontSize: 12,
+              style: GoogleFonts.cairo(
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: goldPrimary,
+                color: white,
               ),
+              textDirection: TextDirection.rtl,
             ),
           ),
-          const Text(
+          Text(
             'الخدمات المتاحة',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+            style: GoogleFonts.cairo(
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
               color: white,
+              height: 1.2,
             ),
+            textDirection: TextDirection.rtl,
           ),
         ],
       ),
     );
   }
 
-  // ===== كرت الخدمة — أبيض =====
   Widget _buildServiceCard(Map<String, dynamic> service, int index) {
+    final imageIndex = 10 + (index * 10);
+    final imagePath = 'assets/images/$imageIndex.jpg';
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ServiceDetailsScreen(service: service),
+            builder: (context) => ServiceDetailsScreen(
+              service: {
+                ...service,
+                'image': imagePath,
+              },
+            ),
           ),
         );
       },
@@ -500,117 +563,134 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
         },
         child: Container(
           decoration: BoxDecoration(
-            color: white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderGreen),
+            gradient: LinearGradient(
+              colors: [white.withOpacity(0.25), white.withOpacity(0.15)],
+            ),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: white.withOpacity(0.6), width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: primaryGreenDark.withOpacity(0.7),
+                blurRadius: 40,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // صورة الخدمة
               Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: whiteSoft,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
+                height: 110,
+                decoration: BoxDecoration(
+                  color: white.withOpacity(0.2),
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(24),
+                    topLeft: Radius.circular(24),
                   ),
                 ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(24),
+                    topLeft: Radius.circular(24),
                   ),
                   child: Image.asset(
-                    service['image'],
+                    imagePath,
                     fit: BoxFit.cover,
                     width: double.infinity,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: whiteSoft,
-                        child: const Center(
-                          child: Icon(Icons.image_not_supported, color: textLight, size: 32),
+                        color: white.withOpacity(0.2),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.image_not_supported,
+                                color: white.withOpacity(0.6), size: 36),
+                            const SizedBox(height: 6),
+                            Text(
+                              'صورة $imageIndex',
+                              style: GoogleFonts.cairo(
+                                color: white.withOpacity(0.8),
+                                fontSize: 11,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
                 ),
               ),
-              // محتوى الكرت
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         service['title'],
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: GoogleFonts.cairo(
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: textDark,
+                          color: white,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         service['description'],
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: textMedium,
+                        style: GoogleFonts.cairo(
+                          fontSize: 11,
+                          color: white.withOpacity(0.9),
                           height: 1.4,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const Spacer(),
-                      // السعر والوقت — ذهبي وأخضر
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                          color: whiteSoft,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: borderGreen),
+                          gradient: LinearGradient(
+                            colors: [emeraldLight.withOpacity(0.3), primaryGreenLight.withOpacity(0.2)],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: emeraldLight.withOpacity(0.5)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               service['currency'],
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
+                              style: GoogleFonts.cairo(
+                                fontSize: 11,
+                                color: white.withOpacity(0.9),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(width: 2),
+                            const SizedBox(width: 4),
                             Text(
                               service['price'],
-                              style: const TextStyle(
-                                fontSize: 12,
+                              style: GoogleFonts.cairo(
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
-                                color: goldPrimary,
+                                color: white,
                               ),
                             ),
-                            const SizedBox(width: 6),
-                            Container(
-                              width: 1,
-                              height: 12,
-                              color: borderGreen,
-                            ),
-                            const SizedBox(width: 6),
-                            const Icon(Icons.access_time, size: 10, color: greenMain),
-                            const SizedBox(width: 2),
+                            const SizedBox(width: 8),
+                            Container(width: 1, height: 14, color: white.withOpacity(0.5)),
+                            const SizedBox(width: 8),
+                            Icon(Icons.access_time, size: 12, color: white.withOpacity(0.9)),
+                            const SizedBox(width: 4),
                             Text(
                               service['time'],
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: textLight,
-                                fontWeight: FontWeight.w500,
+                              style: GoogleFonts.cairo(
+                                fontSize: 11,
+                                color: white.withOpacity(0.9),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -627,14 +707,22 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
     );
   }
 
-  // ===== البار السفلي — أبيض مع حواف خضراء =====
   Widget _buildBottomNav() {
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: white,
+        gradient: LinearGradient(
+          colors: [white.withOpacity(0.25), white.withOpacity(0.15)],
+        ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: greenLight, width: 2),
+        border: Border.all(color: emeraldLight.withOpacity(0.6), width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: primaryGreenDark.withOpacity(0.7),
+            blurRadius: 40,
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -642,31 +730,31 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
           currentIndex: _selectedIndex,
           onTap: (index) => setState(() => _selectedIndex = index),
           backgroundColor: Colors.transparent,
-          selectedItemColor: greenMain,
-          unselectedItemColor: textLight,
-          selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-          unselectedLabelStyle: const TextStyle(fontSize: 10),
+          selectedItemColor: emeraldLight,
+          unselectedItemColor: white.withOpacity(0.7),
+          selectedLabelStyle: GoogleFonts.cairo(fontSize: 11, fontWeight: FontWeight.bold),
+          unselectedLabelStyle: GoogleFonts.cairo(fontSize: 11),
           type: BottomNavigationBarType.fixed,
           elevation: 0,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined, size: 22),
-              activeIcon: Icon(Icons.home_rounded, size: 22),
+              icon: Icon(Icons.home_outlined, size: 24),
+              activeIcon: Icon(Icons.home_rounded, size: 24),
               label: 'الرئيسية',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.description_outlined, size: 22),
-              activeIcon: Icon(Icons.description_rounded, size: 22),
+              icon: Icon(Icons.description_outlined, size: 24),
+              activeIcon: Icon(Icons.description_rounded, size: 24),
               label: 'طلباتي',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_outlined, size: 22),
-              activeIcon: Icon(Icons.notifications_rounded, size: 22),
+              icon: Icon(Icons.notifications_outlined, size: 24),
+              activeIcon: Icon(Icons.notifications_rounded, size: 24),
               label: 'الإشعارات',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline, size: 22),
-              activeIcon: Icon(Icons.person_rounded, size: 22),
+              icon: Icon(Icons.person_outline, size: 24),
+              activeIcon: Icon(Icons.person_rounded, size: 24),
               label: 'حسابي',
             ),
           ],

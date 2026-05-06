@@ -1,192 +1,140 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
 
 class AppTheme {
-  // ═══════════════════════════════════════
-  // 🌙 PREMIUM DARK THEME
-  // ═══════════════════════════════════════
-  static ThemeData get premiumTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      primaryColor: AppColors.ocean, // ✅ للـ primaryColor
-      scaffoldBackgroundColor: AppColors.night,
+  // 🔥 ألوان اللوجن الأساسية 🟢
+  static const Color primaryGreenExtraDark = Color(0xFF013A2E);
+  static const Color primaryGreenDark = Color(0xFF022C22);
+  static const Color emeraldDark = Color(0xFF065F46);
+  static const Color primaryGreen = Color(0xFF047857);
+  static const Color primaryGreenLight = Color(0xFF059669);
+  static const Color emeraldLight = Color(0xFF10B981);
+  static const Color white = Color(0xFFFFFFFF);
 
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.ocean,
-        brightness: Brightness.dark,
-      ).copyWith(
-        primary: AppColors.ocean,
-        secondary: AppColors.gold,
-        surface: AppColors.surface,
-        background: AppColors.night,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onSurface: AppColors.textPrimary,
-        onBackground: AppColors.textPrimary,
-      ),
+  // 🔥 ألوان المشرف
+  static const Color adminYellowDark = Color(0xFFF59D26);
+  static const Color adminOrange = Color(0xFFEA7D1A);
 
-      // ✅ Google Fonts
-      textTheme: GoogleFonts.cairoTextTheme(ThemeData.dark().textTheme),
+  // 🔥 ألوان إضافية للخدمات والكروت
+  static const Color cardWhite = Color(0xFFF8FAFC);
+  static const Color textDark = Color(0xFF1A202C);
+  static const Color textMedium = Color(0xFF4A5568);
+  static const Color textLight = Color(0xFFA0AEC0);
+  static const Color borderLight = Color(0xFFE2E8F0);
+  static const Color surfaceLight = Color(0xFFF1F5F9);
 
-      appBarTheme: const AppBarTheme(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.textPrimary,
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-        ),
-      ),
+  // 🔥 Gradients جاهزة
+  static const LinearGradient primaryGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      primaryGreenExtraDark,
+      primaryGreenDark,
+      primaryGreenDark,
+      emeraldDark,
+      primaryGreen,
+    ],
+  );
 
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.ocean,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
+  static const LinearGradient adminGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [adminOrange, adminYellowDark],
+  );
 
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.0), // ← 24.0
-        ),
-        color: Colors.white,
-        surfaceTintColor: Colors.transparent,
-      ),
+  static const LinearGradient loginButtonGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [primaryGreenDark, primaryGreen],
+  );
 
-      // ✅ Bottom Navigation للـ Dark
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        selectedItemColor: AppColors.ocean,
-        unselectedItemColor: AppColors.textSecondary,
-        type: BottomNavigationBarType.fixed,
-      ),
+  static const LinearGradient adminButtonGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [adminOrange, adminYellowDark],
+  );
 
-      // ✅ Input Decoration للـ Dark
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.surface,
-        contentPadding: const EdgeInsets.all(18),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: AppColors.ocean.withOpacity(0.2)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.gold, width: 2),
-        ),
-      ),
-    );
+  // 🔥 BoxShadow جاهزة
+  static final BoxShadow primaryShadow = BoxShadow(
+    color:  const Color(0xFF022C22).withOpacity(0.7),
+    blurRadius: 60,
+    spreadRadius: 0,
+  );
+
+  static final BoxShadow cardShadow = BoxShadow(
+    color: const Color(0xFF022C22).withOpacity(0.5),
+    blurRadius: 40,
+    spreadRadius: 0,
+    offset: const Offset(0, 10),
+  );
+
+  // 🔥 Text Styles جاهزة
+  static TextStyle get titleLarge => GoogleFonts.cairo(
+    fontSize: 24,
+    fontWeight: FontWeight.w900,
+    color: white,
+    height: 1.2,
+  );
+
+  static TextStyle get titleMedium => GoogleFonts.cairo(
+    fontSize: 22,
+    fontWeight: FontWeight.w900,
+    color: white,
+    height: 1.2,
+  );
+
+  static TextStyle get bodyLarge => GoogleFonts.cairo(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: white,
+  );
+
+  static TextStyle get bodyMedium => GoogleFonts.cairo(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: white.withOpacity(0.9),
+  );
+
+  static TextStyle get caption => GoogleFonts.cairo(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: white.withOpacity(0.8),
+  );
+
+  // 🔥 ThemeData كاملة للتطبيق
+  static ThemeData get lightTheme => ThemeData(
+    primarySwatch: createMaterialColor(primaryGreen),
+    scaffoldBackgroundColor: primaryGreenDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      iconTheme: IconThemeData(color: white),
+    ),
+    textTheme: GoogleFonts.cairoTextTheme(),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ),
+  );
+
+  // 🔥 دالة مساعدة لإنشاء MaterialColor
+  static MaterialColor createMaterialColor(Color color) {
+    List strengths = <double>[.05];
+    Map<int, Color> swatch = {};
+    final int r = color.red, g = color.green, b = color.blue;
+
+    for (int i = 1; i < 10; i++) {
+      strengths.add(0.1 * i);
+    }
+    for (var strength in strengths) {
+      final double ds = 0.5 - strength;
+      swatch[(strength * 1000).round()] = Color.fromRGBO(
+        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+        1,
+      );
+    }
+    return MaterialColor(color.value, swatch);
   }
-
-  // ═══════════════════════════════════════
-  // ☀️ GOVERNMENT LIGHT THEME (محدث كامل)
-  // ═══════════════════════════════════════
-  static ThemeData get governmentTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      primaryColor: _primaryGreen, // ✅ مطلوب للـ AppBar و FAB
-      scaffoldBackgroundColor: _backgroundLight,
-
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: _primaryGreen,
-        brightness: Brightness.light,
-      ).copyWith(
-        primary: _primaryGreen,
-        secondary: _gold,
-        surface: Colors.white,
-        background: _backgroundLight,
-        surfaceVariant: _backgroundLight.withOpacity(0.7), // ✅ للـ cards
-        onPrimary: Colors.white,
-        onSecondary: Colors.black,
-        onSurface: _textPrimary,
-        onBackground: _textPrimary,
-        onSurfaceVariant: _textSecondary, // ✅ للـ unselected items
-      ),
-
-      // ✅ Google Fonts
-      textTheme: GoogleFonts.cairoTextTheme(ThemeData.light().textTheme),
-
-      appBarTheme: AppBarTheme(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        foregroundColor: _textPrimary, // ✅ محدد صح
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: _textPrimary,
-        ),
-      ),
-
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _primaryGreen,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(18),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: _primaryGreen.withOpacity(0.2)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: _gold, width: 2),
-        ),
-      ),
-
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-        ),
-        color: Colors.white,
-      ),
-
-      // ✅ Bottom Navigation ممتاز للـ Light
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: _primaryGreen,
-        unselectedItemColor: _textSecondary,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
-      ),
-    );
-  }
-
-  // ═══════════════════════════════════════
-  // 🎨 COLORS (حكومي) - محدثة
-  // ═══════════════════════════════════════
-  static const Color _primaryGreen = Color(0xFF0E7A4A);
-  static const Color _gold = Color(0xFFFFC107);
-  static const Color _backgroundLight = Color(0xFFF5F7FA);
-  static const Color _textPrimary = Color(0xFF1A1A1A);
-  static const Color _textSecondary = Color(0xFF757575);
 }
