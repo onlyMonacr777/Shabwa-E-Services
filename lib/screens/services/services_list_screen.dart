@@ -26,7 +26,80 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
     {'name': 'التجارة', 'icon': Icons.business_center},
   ];
 
-
+  final List<Map<String, dynamic>> services = [
+    {
+      'title': 'استخراج جواز سفر',
+      'category': 'الجوازات',
+      'description': 'تقديم طلب استخراج جواز سفر جديد أو تجديد',
+      'price': '15,000',
+      'currency': 'ر.ي',
+      'time': '3 أيام',
+      'requiredDocs': ['صورة الهوية', 'صورة شخصية', 'شهادة ميلاد'],
+    },
+    {
+      'title': 'تجديد جواز سفر',
+      'category': 'الجوازات',
+      'description': 'تجديد جواز السفر منتهي الصلاحية',
+      'price': '12,000',
+      'currency': 'ر.ي',
+      'time': '2 أيام',
+      'requiredDocs': ['جواز السفر القديم', 'صورة شخصية'],
+    },
+    {
+      'title': 'استخراج بطاقة شخصية',
+      'category': 'الأحوال المدنية',
+      'description': 'طلب استخراج بطاقة هوية وطنية جديدة',
+      'price': '5,000',
+      'currency': 'ر.ي',
+      'time': '5 أيام',
+      'requiredDocs': ['صورة شخصية', 'شهادة ميلاد', 'إثبات محل سكن'],
+    },
+    {
+      'title': 'ترخيص تجاري',
+      'category': 'التجارة',
+      'description': 'استخراج ترخيص مزاولة النشاط التجاري',
+      'price': '25,000',
+      'currency': 'ر.ي',
+      'time': '7 أيام',
+      'requiredDocs': ['عقد الإيجار', 'البطاقة الضريبية', 'الهوية'],
+    },
+    {
+      'title': 'تسجيل مركبة',
+      'category': 'المرور',
+      'description': 'تسجيل مركبة جديدة أو نقل ملكية',
+      'price': '20,000',
+      'currency': 'ر.ي',
+      'time': '4 أيام',
+      'requiredDocs': ['فاتورة الشراء', 'شهادة جمركية', 'الهوية'],
+    },
+    {
+      'title': 'شهادة صحية',
+      'category': 'الصحة',
+      'description': 'استخراج شهادة صحية للعمل أو السفر',
+      'price': '3,000',
+      'currency': 'ر.ي',
+      'time': '1 يوم',
+      'requiredDocs': ['صورة شخصية', 'تحليل مخبري'],
+    },
+    {
+      'title': 'شهادة ميلاد',
+      'category': 'الأحوال المدنية',
+      'description': 'استخراج شهادة ميلاد أو توثيقها',
+      'price': '2,000',
+      'currency': 'ر.ي',
+      'time': '2 أيام',
+      'requiredDocs': ['إثبات ولادة', 'هوية الأب', 'هوية الأم'],
+    },
+    {
+      'title': 'تصديق شهادة دراسية',
+      'category': 'التعليم',
+      'description': 'تصديق الشهادات الدراسية من الجامعات',
+      'price': '8,000',
+      'currency': 'ر.ي',
+      'time': '3 أيام',
+      'requiredDocs': ['الشهادة الأصلية', 'صورة شخصية'],
+    },
+  ];
 
   List<Map<String, dynamic>> get filteredServices {
     return services.where((service) {
