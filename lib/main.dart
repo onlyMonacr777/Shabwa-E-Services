@@ -42,13 +42,13 @@ class PreviewScreen extends StatelessWidget {
     // {'name': HomeScreen(), 'widget':  HomeScreen()},
       {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
     {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
-      {'name': AdminDashboard(), 'widget': const AdminDashboard()},
+   //   {'name': AdminDashboard(), 'widget': const AdminDashboard()},
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('معاينة الشاشات'),
-        backgroundColor: AppColors.ocean,
+       // backgroundColor: AppColors.ocean,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -59,7 +59,7 @@ class PreviewScreen extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: AppColors.ocean,
+             //   backgroundColor: AppColors.ocean,
                 child: Text('${index + 1}',
                     style: const TextStyle(color: Colors.white)),
               ),
@@ -68,7 +68,7 @@ class PreviewScreen extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing: const Icon(
-                  Icons.arrow_forward_ios, color: AppColors.ocean),
+                  Icons.arrow_forward_ios, color: Colors.blueGrey),
               onTap: () {
                 Navigator.push(
                   context,

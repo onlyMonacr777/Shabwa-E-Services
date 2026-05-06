@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-
-
+import '/core/theme/app_theme.dart';
 import '../auth/register_screen.dart';
 
-
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key}); // ✅ إضافة super.key
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -19,13 +19,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _slideAnimation;
   late Animation<double> _progressAnimation;
   int _splashCounter = 0;
-
-  // 🔥 الألوان الحكومية 🟢
-  static const Color primaryGreenDark = Color(0xFF022C22);
-  static const Color primaryGreen = Color(0xFF047857);
-  static const Color primaryGreenLight = Color(0xFF059669);
-  static const Color emeraldLight = Color(0xFF10B981);
-  static const Color white = Color(0xFFFFFFFF);
 
   @override
   void initState() {
@@ -58,13 +51,13 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // 🔥 الانتقال للـ Home أو Login بعد 3.5 ثانية
+    // 🔥 الانتقال للـ Register بعد 3.5 ثانية
     Future.delayed(const Duration(seconds: 3, milliseconds: 500), () {
       if (mounted) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => RegisterScreen()),
+          MaterialPageRoute(builder: (context) => const RegisterScreen()),
         );
       }
     });
@@ -76,16 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              primaryGreenDark,
-              primaryGreenDark,
-              const Color(0xFF065F46),
-              primaryGreen,
-            ],
-          ),
+          gradient: AppTheme.primaryGradient, // 🔥 من الثيم
         ),
         child: SafeArea(
           child: Column(
@@ -102,22 +86,22 @@ class _SplashScreenState extends State<SplashScreen>
                       margin: const EdgeInsets.symmetric(horizontal: 40),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [white.withOpacity(0.2), white.withOpacity(0.1)],
+                          colors: [
+                            AppTheme.white.withOpacity(0.2),
+                            AppTheme.white.withOpacity(0.1),
+                          ],
                         ),
                         shape: BoxShape.circle,
-                        border: Border.all(color: white.withOpacity(0.6), width: 3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: primaryGreenDark.withOpacity(0.7),
-                            blurRadius: 60,
-                            spreadRadius: 0,
-                          ),
-                        ],
+                        border: Border.all(
+                          color: AppTheme.white.withOpacity(0.6),
+                          width: 3,
+                        ),
+                        boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
                       ),
                       child: Icon(
                         Icons.account_balance,
                         size: 110,
-                        color: white,
+                        color: AppTheme.white,
                       ),
                     ),
                   );
@@ -138,14 +122,11 @@ class _SplashScreenState extends State<SplashScreen>
                           Text(
                             'بوابة شبوة',
                             textDirection: TextDirection.rtl,
-                            style: GoogleFonts.cairo(
+                            style: AppTheme.titleLarge.copyWith( // 🔥 من الثيم
                               fontSize: 44,
-                              fontWeight: FontWeight.w900,
-                              color: white,
-                              height: 1.2,
                               shadows: [
                                 Shadow(
-                                  color: primaryGreenDark,
+                                  color: AppTheme.primaryGreenDark,
                                   offset: const Offset(0, 8),
                                   blurRadius: 24,
                                 ),
@@ -156,11 +137,8 @@ class _SplashScreenState extends State<SplashScreen>
                           Text(
                             'الخدمات الحكومية الإلكترونية',
                             textDirection: TextDirection.rtl,
-                            style: GoogleFonts.cairo(
+                            style: AppTheme.bodyLarge.copyWith( // 🔥 من الثيم
                               fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: white.withOpacity(0.95),
-                              height: 1.3,
                             ),
                           ),
                         ],
@@ -183,18 +161,16 @@ class _SplashScreenState extends State<SplashScreen>
                         children: [
                           LinearProgressIndicator(
                             value: _progressAnimation.value,
-                            backgroundColor: white.withOpacity(0.3),
-                            valueColor: AlwaysStoppedAnimation<Color>(emeraldLight),
+                            backgroundColor: AppTheme.white.withOpacity(0.3),
+                            valueColor: AlwaysStoppedAnimation<Color>(AppTheme.emeraldLight),
                             borderRadius: BorderRadius.circular(12),
                             minHeight: 12,
                           ),
                           const SizedBox(height: 16),
                           Text(
                             'جاري التحميل...',
-                            style: GoogleFonts.cairo(
-                              color: white.withOpacity(0.9),
+                            style: AppTheme.bodyMedium.copyWith( // 🔥 من الثيم
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
