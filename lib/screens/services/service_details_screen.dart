@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '/core/theme/app_theme.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> service;
@@ -10,20 +12,7 @@ class ServiceDetailsScreen extends StatefulWidget {
 }
 
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
-  static const Color greenMain     = Color(0xFF1B5E3F);
-  static const Color greenDark     = Color(0xFF144D33);
-  static const Color greenLight    = Color(0xFF2E8B5E);
-  static const Color white         = Color(0xFFFFFFFF);
-  static const Color whiteSoft     = Color(0xFFF5FAF7);
-  static const Color goldPrimary   = Color(0xFFD4AF37);
-  static const Color goldLight     = Color(0xFFF0D878);
-  static const Color goldBg        = Color(0xFFFFF8E1);
-  static const Color textDark      = Color(0xFF1A1A1A);
-  static const Color textMedium    = Color(0xFF4A4A4A);
-  static const Color textLight     = Color(0xFF8A9A8E);
-  static const Color borderGreen   = Color(0xFFD0E8D8);
-  static const Color errorRed      = Color(0xFFE74C3C);
-
+  // 🔥 استخدام AppTheme بدل الألوان الثابتة
   // Controllers for form fields
   final _fullNameController = TextEditingController();
   final _idNumberController = TextEditingController();
@@ -73,9 +62,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: white,
+            color: AppTheme.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: goldPrimary, width: 2),
+            border: Border.all(color: AppTheme.primaryGreen, width: 2),
+            boxShadow: [AppTheme.primaryShadow],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -83,38 +73,40 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: goldBg,
+                  gradient: LinearGradient(
+                    colors: [AppTheme.primaryGreenLight.withOpacity(0.3), AppTheme.emeraldLight.withOpacity(0.2)],
+                  ),
                   shape: BoxShape.circle,
-                  border: Border.all(color: goldPrimary, width: 2),
+                  border: Border.all(color: AppTheme.primaryGreen, width: 2),
                 ),
-                child: const Icon(Icons.check, color: goldPrimary, size: 40),
+                child: const Icon(Icons.check, color: AppTheme.white, size: 40),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'تم إرسال طلبك بنجاح!',
-                style: TextStyle(
-                  color: textDark,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                style: AppTheme.titleMedium.copyWith(
+                  color: AppTheme.textDark,
+                  height: 1.2,
                 ),
+                textDirection: TextDirection.rtl,
               ),
               const SizedBox(height: 8),
               Text(
                 'رقم طلبك: #${DateTime.now().millisecondsSinceEpoch.toString().substring(5, 13)}',
-                style: const TextStyle(
-                  color: goldPrimary,
-                  fontSize: 16,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.primaryGreen,
                   fontWeight: FontWeight.bold,
                 ),
+                textDirection: TextDirection.rtl,
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'سيتم مراجعة طلبك والتواصل معك قريباً',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: textLight,
-                  fontSize: 13,
+                style: AppTheme.caption.copyWith(
+                  color: AppTheme.textLight,
                 ),
+                textDirection: TextDirection.rtl,
               ),
               const SizedBox(height: 24),
               GestureDetector(
@@ -125,17 +117,18 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
                   decoration: BoxDecoration(
-                    color: greenMain,
+                    gradient: AppTheme.primaryGradient,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: goldPrimary.withOpacity(0.4)),
+                    border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.4)),
+                    boxShadow: [AppTheme.primaryShadow],
                   ),
-                  child: const Text(
+                  child: Text(
                     'العودة للرئيسية',
-                    style: TextStyle(
-                      color: white,
-                      fontSize: 14,
+                    style: AppTheme.bodyMedium.copyWith(
+                      color: AppTheme.white,
                       fontWeight: FontWeight.bold,
                     ),
+                    textDirection: TextDirection.rtl,
                   ),
                 ),
               ),
@@ -150,14 +143,14 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     if (!_isFormValid) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.error_outline, color: white),
-              SizedBox(width: 8),
-              Text('يرجى تعبئة جميع الحقول ورفع المستندات المطلوبة'),
+              Icon(Icons.error_outline, color: AppTheme.white),
+              const SizedBox(width: 8),
+              Text('يرجى تعبئة جميع الحقول ورفع المستندات المطلوبة', style: AppTheme.caption.copyWith(color: AppTheme.white)),
             ],
           ),
-          backgroundColor: errorRed,
+          backgroundColor: AppTheme.primaryGreenDark,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
@@ -172,7 +165,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     final service = widget.service;
 
     return Scaffold(
-      backgroundColor: greenMain,
+      backgroundColor: AppTheme.primaryGreenDark,
       body: SafeArea(
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
@@ -181,12 +174,13 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             SliverToBoxAdapter(child: _buildImageHeader(service)),
             SliverToBoxAdapter(
               child: Container(
-                decoration: const BoxDecoration(
-                  color: white,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: AppTheme.white,
+                  borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(30),
                     topLeft: Radius.circular(30),
                   ),
+                  boxShadow: [AppTheme.cardShadow],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -226,21 +220,27 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: white.withOpacity(0.2),
+                gradient: LinearGradient(
+                  colors: [AppTheme.white.withOpacity(0.2), AppTheme.white.withOpacity(0.1)],
+                ),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: goldPrimary.withOpacity(0.3)),
+                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+                boxShadow: [AppTheme.primaryShadow],
               ),
-              child: const Icon(Icons.arrow_forward, color: white, size: 22),
+              child: Icon(Icons.arrow_forward, color: AppTheme.white, size: 22),
             ),
           ),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: white.withOpacity(0.2),
+              gradient: LinearGradient(
+                colors: [AppTheme.white.withOpacity(0.2), AppTheme.white.withOpacity(0.1)],
+              ),
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: goldPrimary.withOpacity(0.3)),
+              border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+              boxShadow: [AppTheme.primaryShadow],
             ),
-            child: const Icon(Icons.favorite_border, color: goldPrimary, size: 22),
+            child: Icon(Icons.favorite_border, color: AppTheme.emeraldLight, size: 22),
           ),
         ],
       ),
@@ -252,9 +252,12 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
       margin: const EdgeInsets.all(16),
       height: 200,
       decoration: BoxDecoration(
-        color: whiteSoft,
+        gradient: LinearGradient(
+          colors: [AppTheme.surfaceLight, AppTheme.cardWhite],
+        ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: goldPrimary.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+        boxShadow: [AppTheme.cardShadow],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -264,9 +267,13 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
           width: double.infinity,
           errorBuilder: (context, error, stackTrace) {
             return Container(
-              color: whiteSoft,
-              child: const Center(
-                child: Icon(Icons.image_not_supported, color: textLight, size: 50),
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+              ),
+              child: Icon(
+                Icons.image_not_supported,
+                color: AppTheme.white.withOpacity(0.6),
+                size: 50,
               ),
             );
           },
@@ -284,34 +291,34 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: goldBg,
+              gradient: LinearGradient(
+                colors: [AppTheme.emeraldLight.withOpacity(0.3), AppTheme.primaryGreenLight.withOpacity(0.2)],
+              ),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: goldPrimary.withOpacity(0.3)),
+              border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
             ),
             child: Text(
               service['category'],
-              style: const TextStyle(
-                color: goldPrimary,
-                fontSize: 12,
+              style: AppTheme.caption.copyWith(
+                color: AppTheme.primaryGreen,
                 fontWeight: FontWeight.bold,
               ),
+              textDirection: TextDirection.rtl,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             service['title'],
             textAlign: TextAlign.right,
-            style: const TextStyle(
-              color: textDark,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTheme.titleLarge.copyWith(color: AppTheme.textDark),
+            textDirection: TextDirection.rtl,
           ),
         ],
       ),
     );
   }
 
+  // 🔥 تم تعديل هذه الدالة - إزالة الظلال من كارد السعر
   Widget _buildPriceSection(Map<String, dynamic> service) {
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -321,25 +328,26 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: whiteSoft,
+                gradient: LinearGradient(
+                  colors: [AppTheme.cardWhite, AppTheme.surfaceLight],
+                ),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: borderGreen),
+                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+                // تم إزالة boxShadow من هنا
               ),
               child: Column(
                 children: [
-                  const Icon(Icons.access_time, color: greenMain, size: 24),
+                  Icon(Icons.access_time, color: AppTheme.primaryGreen, size: 24),
                   const SizedBox(height: 8),
                   Text(
                     service['time'],
-                    style: const TextStyle(
-                      color: textDark,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppTheme.bodyMedium.copyWith(color: AppTheme.textDark),
+                    textDirection: TextDirection.rtl,
                   ),
-                  const Text(
+                  Text(
                     'مدة التنفيذ',
-                    style: TextStyle(color: textLight, fontSize: 11),
+                    style: AppTheme.caption.copyWith(color: AppTheme.textLight),
+                    textDirection: TextDirection.rtl,
                   ),
                 ],
               ),
@@ -350,25 +358,26 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: goldBg,
+                gradient: LinearGradient(
+                  colors: [AppTheme.primaryGreenLight.withOpacity(0.1), AppTheme.emeraldLight.withOpacity(0.05)],
+                ),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: goldPrimary.withOpacity(0.3)),
+                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+                // تم إزالة boxShadow من هنا
               ),
               child: Column(
                 children: [
-                  const Icon(Icons.payments_outlined, color: goldPrimary, size: 24),
+                  Icon(Icons.payments_outlined, color: AppTheme.primaryGreen, size: 24),
                   const SizedBox(height: 8),
                   Text(
                     '${service['price']} ${service['currency']}',
-                    style: const TextStyle(
-                      color: goldPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppTheme.bodyLarge.copyWith(color: AppTheme.primaryGreen),
+                    textDirection: TextDirection.rtl,
                   ),
-                  const Text(
+                  Text(
                     'رسوم الخدمة',
-                    style: TextStyle(color: textLight, fontSize: 11),
+                    style: AppTheme.caption.copyWith(color: AppTheme.textLight),
+                    textDirection: TextDirection.rtl,
                   ),
                 ],
               ),
@@ -382,7 +391,14 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(height: 1, color: borderGreen),
+      child: Container(
+        height: 1,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppTheme.primaryGreen.withOpacity(0.1), AppTheme.borderLight],
+          ),
+        ),
+      ),
     );
   }
 
@@ -392,30 +408,27 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 'وصف الخدمة',
-                style: TextStyle(
-                  color: textDark,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.textDark),
+                textDirection: TextDirection.rtl,
               ),
-              SizedBox(width: 8),
-              Icon(Icons.info_outline, color: greenMain, size: 20),
+              const SizedBox(width: 8),
+              Icon(Icons.info_outline, color: AppTheme.primaryGreen, size: 20),
             ],
           ),
           const SizedBox(height: 12),
           Text(
             service['description'],
             textAlign: TextAlign.right,
-            style: const TextStyle(
-              color: textMedium,
-              fontSize: 14,
+            style: AppTheme.bodyMedium.copyWith(
+              color: AppTheme.textMedium,
               height: 1.6,
             ),
+            textDirection: TextDirection.rtl,
           ),
         ],
       ),
@@ -430,19 +443,16 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 'المستندات المطلوبة',
-                style: TextStyle(
-                  color: textDark,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.textDark),
+                textDirection: TextDirection.rtl,
               ),
-              SizedBox(width: 8),
-              Icon(Icons.description_outlined, color: greenMain, size: 20),
+              const SizedBox(width: 8),
+              Icon(Icons.description_outlined, color: AppTheme.primaryGreen, size: 20),
             ],
           ),
           const SizedBox(height: 12),
@@ -458,16 +468,18 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isUploaded ? whiteSoft : white,
+        gradient: isUploaded
+            ? LinearGradient(colors: [AppTheme.primaryGreenLight.withOpacity(0.1), AppTheme.emeraldLight.withOpacity(0.05)])
+            : LinearGradient(colors: [AppTheme.cardWhite, AppTheme.surfaceLight]),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isUploaded ? greenLight : borderGreen,
+          color: isUploaded ? AppTheme.primaryGreenLight : AppTheme.borderLight,
           width: isUploaded ? 2 : 1,
         ),
+        boxShadow: isUploaded ? [AppTheme.cardShadow] : [],
       ),
       child: Row(
         children: [
-          // زر الرفع
           GestureDetector(
             onTap: () {
               setState(() {
@@ -477,26 +489,25 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: isUploaded ? greenLight : goldBg,
+                gradient: isUploaded
+                    ? LinearGradient(colors: [AppTheme.primaryGreenLight, AppTheme.emeraldLight])
+                    : LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.1), AppTheme.primaryGreenLight.withOpacity(0.05)]),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: isUploaded ? greenLight : goldPrimary.withOpacity(0.3),
-                ),
+                border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     isUploaded ? Icons.check : Icons.upload_file,
-                    color: isUploaded ? white : goldPrimary,
+                    color: AppTheme.white,
                     size: 16,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     isUploaded ? 'تم الرفع' : 'رفع',
-                    style: TextStyle(
-                      color: isUploaded ? white : goldPrimary,
-                      fontSize: 11,
+                    style: AppTheme.caption.copyWith(
+                      color: AppTheme.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -509,23 +520,24 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             child: Text(
               doc,
               textAlign: TextAlign.right,
-              style: TextStyle(
-                color: isUploaded ? greenMain : textDark,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+              style: AppTheme.bodyMedium.copyWith(
+                color: isUploaded ? AppTheme.primaryGreen : AppTheme.textDark,
               ),
+              textDirection: TextDirection.rtl,
             ),
           ),
           const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: isUploaded ? greenLight.withOpacity(0.2) : goldBg,
+              gradient: isUploaded
+                  ? LinearGradient(colors: [AppTheme.primaryGreenLight.withOpacity(0.3), AppTheme.emeraldLight.withOpacity(0.2)])
+                  : LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.1), AppTheme.primaryGreenLight.withOpacity(0.05)]),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
               isUploaded ? Icons.check_circle : Icons.attach_file,
-              color: isUploaded ? greenLight : goldPrimary,
+              color: isUploaded ? AppTheme.primaryGreenLight : AppTheme.primaryGreen,
               size: 18,
             ),
           ),
@@ -534,35 +546,29 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  // ===== نموذج تعبئة البيانات =====
   Widget _buildFormSection() {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 'بيانات مقدم الطلب',
-                style: TextStyle(
-                  color: textDark,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTheme.bodyMedium.copyWith(color: AppTheme.textDark),
+                textDirection: TextDirection.rtl,
               ),
-              SizedBox(width: 8),
-              Icon(Icons.person_outline, color: greenMain, size: 20),
+              const SizedBox(width: 8),
+              Icon(Icons.person_outline, color: AppTheme.primaryGreen, size: 20),
             ],
           ),
           const SizedBox(height: 4),
           Text(
             'يرجى تعبئة جميع الحقول المطلوبة',
-            style: TextStyle(
-              color: textLight,
-              fontSize: 12,
-            ),
+            style: AppTheme.caption.copyWith(color: AppTheme.textLight),
+            textDirection: TextDirection.rtl,
           ),
           const SizedBox(height: 16),
           _buildTextField(
@@ -645,17 +651,15 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             if (isRequired)
               Text(
                 ' *',
-                style: TextStyle(
-                  color: isEmpty ? errorRed : greenLight,
-                  fontSize: 14,
+                style: AppTheme.caption.copyWith(
+                  color: isEmpty ? AppTheme.primaryGreenDark : AppTheme.primaryGreenLight,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             Text(
               label,
-              style: const TextStyle(
-                color: textDark,
-                fontSize: 13,
+              style: AppTheme.caption.copyWith(
+                color: AppTheme.textDark,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -664,35 +668,43 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         const SizedBox(height: 6),
         Container(
           decoration: BoxDecoration(
-            color: whiteSoft,
+            gradient: LinearGradient(
+              colors: [AppTheme.cardWhite, AppTheme.surfaceLight],
+            ),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isEmpty && isRequired ? borderGreen : greenLight.withOpacity(0.5),
+              color: isEmpty && isRequired
+                  ? AppTheme.borderLight
+                  : AppTheme.primaryGreen.withOpacity(0.5),
               width: isEmpty && isRequired ? 1 : 1.5,
             ),
+            boxShadow: controller.text.isNotEmpty ? [AppTheme.cardShadow] : [],
           ),
           child: TextField(
             controller: controller,
             textAlign: TextAlign.right,
-            style: const TextStyle(color: textDark, fontSize: 14),
+            style: AppTheme.bodyMedium.copyWith(color: AppTheme.textDark),
             keyboardType: keyboardType,
             maxLines: maxLines,
             onChanged: (_) => onChanged(),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(
-                color: textLight.withOpacity(0.5),
-                fontSize: 13,
+              hintStyle: AppTheme.caption.copyWith(
+                color: AppTheme.textLight.withOpacity(0.5),
               ),
               prefixIcon: Container(
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: controller.text.isNotEmpty ? greenLight.withOpacity(0.15) : goldBg,
+                  gradient: controller.text.isNotEmpty
+                      ? LinearGradient(colors: [AppTheme.primaryGreenLight.withOpacity(0.15), AppTheme.emeraldLight.withOpacity(0.1)])
+                      : LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.1), AppTheme.primaryGreenLight.withOpacity(0.05)]),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   icon,
-                  color: controller.text.isNotEmpty ? greenLight : goldPrimary,
+                  color: controller.text.isNotEmpty
+                      ? AppTheme.primaryGreenLight
+                      : AppTheme.primaryGreen,
                   size: 18,
                 ),
               ),
@@ -705,7 +717,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  // ===== الموافقة =====
+  // 🔥 تم تعديل هذه الدالة - إزالة الظل من كارد الموافقة
   Widget _buildAgreement() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -714,12 +726,15 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: _isAgreed ? whiteSoft : white,
+            gradient: _isAgreed
+                ? LinearGradient(colors: [AppTheme.primaryGreenLight.withOpacity(0.1), AppTheme.emeraldLight.withOpacity(0.05)])
+                : LinearGradient(colors: [AppTheme.cardWhite, AppTheme.surfaceLight]),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: _isAgreed ? greenLight : borderGreen,
+              color: _isAgreed ? AppTheme.primaryGreenLight : AppTheme.borderLight,
               width: _isAgreed ? 2 : 1,
             ),
+            // تم إزالة boxShadow من هنا
           ),
           child: Row(
             children: [
@@ -727,15 +742,17 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: _isAgreed ? greenLight : whiteSoft,
+                  gradient: _isAgreed
+                      ? LinearGradient(colors: [AppTheme.primaryGreenLight, AppTheme.emeraldLight])
+                      : LinearGradient(colors: [AppTheme.cardWhite, AppTheme.surfaceLight]),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: _isAgreed ? greenLight : borderGreen,
+                    color: _isAgreed ? AppTheme.primaryGreenLight : AppTheme.borderLight,
                     width: 2,
                   ),
                 ),
                 child: _isAgreed
-                    ? const Icon(Icons.check, color: white, size: 16)
+                    ? Icon(Icons.check, color: AppTheme.white, size: 16)
                     : null,
               ),
               const SizedBox(width: 12),
@@ -743,9 +760,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 child: Text(
                   'أقر بأن جميع البيانات المدخلة صحيحة وأنني أوافق على شروط الخدمة',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: _isAgreed ? textDark : textLight,
-                    fontSize: 12,
+                  style: AppTheme.caption.copyWith(
+                    color: _isAgreed ? AppTheme.textDark : AppTheme.textLight,
                     fontWeight: _isAgreed ? FontWeight.w500 : FontWeight.normal,
                   ),
                 ),
@@ -757,7 +773,6 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  // ===== زر التقديم =====
   Widget _buildSubmitButton() {
     final isValid = _isFormValid;
 
@@ -768,28 +783,31 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: isValid ? greenMain : textLight.withOpacity(0.3),
+            gradient: isValid
+                ? AppTheme.primaryGradient
+                : LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.3), AppTheme.primaryGreenDark.withOpacity(0.2)]),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isValid ? goldPrimary.withOpacity(0.4) : Colors.transparent,
+              color: isValid ? AppTheme.primaryGreen.withOpacity(0.4) : Colors.transparent,
             ),
+            boxShadow: isValid ? [AppTheme.primaryShadow] : [],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 isValid ? Icons.check_circle : Icons.lock_outline,
-                color: white,
+                color: AppTheme.white,
                 size: 20,
               ),
               const SizedBox(width: 8),
               Text(
                 isValid ? 'تأكيد وإرسال الطلب' : 'أكمل جميع الحقول المطلوبة',
-                style: const TextStyle(
-                  color: white,
-                  fontSize: 15,
+                style: AppTheme.bodyMedium.copyWith(
+                  color: AppTheme.white,
                   fontWeight: FontWeight.bold,
                 ),
+                textDirection: TextDirection.rtl,
               ),
             ],
           ),

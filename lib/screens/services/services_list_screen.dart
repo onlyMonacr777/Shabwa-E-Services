@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '/core/theme/app_theme.dart';
 import 'service_details_screen.dart';
 
@@ -127,30 +126,29 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
     super.dispose();
   }
 
-  // 🔥 🔥 🔥 الدوال الـ Responsive الجديدة 🔥 🔥 🔥
   int _getCrossAxisCount(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width > 600) return 3; // Tablet
-    if (width > 400) return 2; // Landscape phone
-    return 2; // Portrait phone
+    if (width > 600) return 2;
+    if (width > 360) return 2;
+    return 2;
   }
 
   double _getChildAspectRatio(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     if (width > 600) return 0.75;
-    if (width > 400) return 0.72;
-    return 0.72;
+    return 0.68;
   }
 
+  // ⬇️⬇️⬇️ زودت الارتفاع عشان ما يصير overflow ⬇️⬇️⬇️
   double _getMainAxisExtent(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width > 600) return 220;
-    return 200;
+    if (width > 600) return 260;
+    return 240;
   }
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).padding.bottom + 120;
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom + 100;
 
     return Scaffold(
       body: Container(
@@ -165,16 +163,15 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
               SliverToBoxAdapter(child: _buildSearchBar()),
               SliverToBoxAdapter(child: _buildCategories()),
               SliverToBoxAdapter(child: _buildSectionTitle()),
-              // 🔥 🔥 الـ Grid الـ Responsive 🔥 🔥
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: _getCrossAxisCount(context),
                     childAspectRatio: _getChildAspectRatio(context),
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    mainAxisExtent: _getMainAxisExtent(context), // 🔥 الارتفاع الثابت
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    mainAxisExtent: _getMainAxisExtent(context),
                   ),
                   delegate: SliverChildBuilderDelegate(
                         (context, index) => _buildServiceCard(filteredServices[index], index),
@@ -184,12 +181,191 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
                   ),
                 ),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: bottomPadding)), // 🔥 Responsive padding
+              SliverToBoxAdapter(child: SizedBox(height: bottomPadding)),
             ],
           ),
         ),
       ),
       bottomNavigationBar: _buildBottomNav(),
+    );
+  }
+
+  Widget _buildServiceCard(Map<String, dynamic> service, int index) {
+    final List<String> serviceImages = [
+      'assets/images/10.png',
+      'assets/images/20.png',
+      'assets/images/40.png',
+      'assets/images/30.png',
+      'assets/images/60.png',
+      'assets/images/50.png',
+      'assets/images/80.png',
+      'assets/images/70.png',
+    ];
+
+    final imagePath = serviceImages[index];
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ServiceDetailsScreen(
+              service: {
+                ...service,
+                'image': imagePath,
+              },
+            ),
+          ),
+        );
+      },
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          final delay = index * 0.08;
+          final animationValue = (_animationController.value - delay).clamp(0.0, 1.0);
+          return Transform.translate(
+            offset: Offset(0, 20 * (1 - animationValue)),
+            child: Opacity(
+              opacity: animationValue,
+              child: child,
+            ),
+          );
+        },
+        child: Container(
+          height: _getMainAxisExtent(context),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppTheme.white.withOpacity(0.25), AppTheme.white.withOpacity(0.15)],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 1.5),
+            boxShadow: [AppTheme.primaryShadow],
+          ),
+          child: Stack(
+            children: [
+              // الصورة
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 115,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 115,
+                    alignment: Alignment.center,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 115,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppTheme.emeraldLight.withOpacity(0.6), AppTheme.primaryGreenLight.withOpacity(0.4)],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              // النص - ⬇️⬇️⬇️ صغّرت المسافة عشان ما يصير overflow ⬇️⬇️⬇️
+              Positioned(
+                top: 120,
+                left: 12,
+                right: 12,
+                bottom: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      service['title'],
+                      textAlign: TextAlign.right,
+                      style: AppTheme.bodyMedium.copyWith(
+                        fontSize: 13,        // ⬅️ صغّر شوي
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.white,
+                        shadows: [
+                          Shadow(offset: const Offset(1, 1), blurRadius: 3, color: Colors.black.withOpacity(0.5)),
+                        ],
+                      ),
+                      maxLines: 1,           // ⬅️ سطر واحد بس
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),  // ⬅️ صغّر المسافة
+                    Text(
+                      service['description'],
+                      textAlign: TextAlign.right,
+                      style: AppTheme.caption.copyWith(
+                        fontSize: 10,        // ⬅️ صغّر شوي
+                        height: 1.2,
+                        color: AppTheme.white.withOpacity(0.95),
+                        shadows: [
+                          Shadow(offset: const Offset(1, 1), blurRadius: 2, color: Colors.black.withOpacity(0.4)),
+                        ],
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              // السعر - ⬇️⬇️⬇️ صغّرت padding عشان توفير مساحة ⬇️⬇️⬇️
+              Positioned(
+                bottom: 8,
+                left: 12,
+                right: 12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),  // ⬅️ صغّر padding
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppTheme.emeraldLight.withOpacity(0.9), AppTheme.primaryGreenLight.withOpacity(0.8)],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppTheme.emeraldLight.withOpacity(0.8), width: 1),
+                    boxShadow: [
+                      BoxShadow(color: AppTheme.primaryGreenDark.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 2)),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        service['currency'],
+                        style: AppTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),  // ⬅️ صغّر
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        service['price'],
+                        style: AppTheme.bodyMedium.copyWith(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),  // ⬅️ صغّر
+                      ),
+                      const SizedBox(width: 8),
+                      Container(width: 1, height: 14, color: Colors.white.withOpacity(0.7)),  // ⬅️ صغّر
+                      const SizedBox(width: 8),
+                      Icon(Icons.access_time, size: 12, color: Colors.white),  // ⬅️ صغّر
+                      const SizedBox(width: 4),
+                      Text(
+                        service['time'],
+                        style: AppTheme.caption.copyWith(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 12),  // ⬅️ صغّر
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -471,158 +647,6 @@ class _ServicesListScreenState extends State<ServicesListScreen> with SingleTick
             textDirection: TextDirection.rtl,
           ),
         ],
-      ),
-    );
-  }
-
-  // 🔥 🔥 بطاقة الخدمة المُحسّنة والـ Responsive 🔥 🔥
-  Widget _buildServiceCard(Map<String, dynamic> service, int index) {
-    final imageIndex = 10 + (index * 10);
-    final imagePath = 'assets/images/$imageIndex.jpg';
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ServiceDetailsScreen(
-              service: {
-                ...service,
-                'image': imagePath,
-              },
-            ),
-          ),
-        );
-      },
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          final delay = index * 0.08;
-          final animationValue = (_animationController.value - delay).clamp(0.0, 1.0);
-          return Transform.translate(
-            offset: Offset(0, 20 * (1 - animationValue)),
-            child: Opacity(
-              opacity: animationValue,
-              child: child,
-            ),
-          );
-        },
-        child: Container(
-          height: _getMainAxisExtent(context), // 🔥 ارتفاع ثابت responsive
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppTheme.white.withOpacity(0.25), AppTheme.white.withOpacity(0.15)],
-            ),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 1.5),
-            boxShadow: [AppTheme.primaryShadow],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥 صورة محسنة
-              Container(
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppTheme.white.withOpacity(0.2),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: AppTheme.white.withOpacity(0.2),
-                        child: Icon(
-                          Icons.image_not_supported,
-                          color: AppTheme.white.withOpacity(0.6),
-                          size: 40,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        service['title'],
-                        textAlign: TextAlign.right,
-                        style: AppTheme.bodyMedium.copyWith(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        service['description'],
-                        textAlign: TextAlign.right,
-                        style: AppTheme.caption.copyWith(
-                          fontSize: 10,
-                          height: 1.3,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [AppTheme.emeraldLight.withOpacity(0.3), AppTheme.primaryGreenLight.withOpacity(0.2)],
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppTheme.emeraldLight.withOpacity(0.5)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              service['currency'],
-                              style: AppTheme.caption.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              service['price'],
-                              style: AppTheme.bodyMedium.copyWith(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Container(width: 1, height: 12, color: AppTheme.white.withOpacity(0.5)),
-                            const SizedBox(width: 6),
-                            Icon(Icons.access_time, size: 12, color: AppTheme.white.withOpacity(0.9)),
-                            const SizedBox(width: 3),
-                            Text(
-                              service['time'],
-                              style: AppTheme.caption.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
