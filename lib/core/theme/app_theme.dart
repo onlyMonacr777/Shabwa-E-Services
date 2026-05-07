@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // 🔥 ألوان اللوجن الأساسية 🟢
+
   static const Color primaryGreenExtraDark = Color(0xFF013A2E);
   static const Color primaryGreenDark = Color(0xFF022C22);
   static const Color emeraldDark = Color(0xFF065F46);
@@ -11,11 +11,11 @@ class AppTheme {
   static const Color emeraldLight = Color(0xFF10B981);
   static const Color white = Color(0xFFFFFFFF);
 
-  // 🔥 ألوان المشرف
+
   static const Color adminYellowDark = Color(0xFFF59D26);
   static const Color adminOrange = Color(0xFFEA7D1A);
 
-  // 🔥 ألوان إضافية للخدمات والكروت
+
   static const Color cardWhite = Color(0xFFF8FAFC);
   static const Color textDark = Color(0xFF1A202C);
   static const Color textMedium = Color(0xFF4A5568);
@@ -23,7 +23,7 @@ class AppTheme {
   static const Color borderLight = Color(0xFFE2E8F0);
   static const Color surfaceLight = Color(0xFFF1F5F9);
 
-  // 🔥 Gradients جاهزة
+
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -54,7 +54,7 @@ class AppTheme {
     colors: [adminOrange, adminYellowDark],
   );
 
-  // 🔥 BoxShadow جاهزة
+
   static final BoxShadow primaryShadow = BoxShadow(
     color:  const Color(0xFF022C22).withOpacity(0.7),
     blurRadius: 60,
@@ -68,7 +68,6 @@ class AppTheme {
     offset: const Offset(0, 10),
   );
 
-  // 🔥 Text Styles جاهزة
   static TextStyle get titleLarge => GoogleFonts.cairo(
     fontSize: 24,
     fontWeight: FontWeight.w900,
@@ -101,7 +100,7 @@ class AppTheme {
     color: white.withOpacity(0.8),
   );
 
-  // 🔥 ThemeData كاملة للتطبيق
+
   static ThemeData get lightTheme => ThemeData(
     primarySwatch: createMaterialColor(primaryGreen),
     scaffoldBackgroundColor: primaryGreenDark,
@@ -117,7 +116,7 @@ class AppTheme {
     ),
   );
 
-  // 🔥 دالة مساعدة لإنشاء MaterialColor
+
   static MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];
     Map<int, Color> swatch = {};

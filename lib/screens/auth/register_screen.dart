@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '/core/theme/app_theme.dart'; //ربطت بالثيم الجديد
+import '/core/theme/app_theme.dart';
 import '../home/home_screen.dart';
 import '../admin/admin_dashboard.dart';
 import 'login_screen.dart';
@@ -86,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       SnackBar(
         content: Text(
           message,
-          style: AppTheme.bodyMedium, // 🔥 من الثيم
+          style: AppTheme.bodyMedium,
           textDirection: TextDirection.rtl,
         ),
         backgroundColor: _isAdmin ? AppTheme.adminYellowDark : AppTheme.primaryGreen,
@@ -101,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.primaryGradient, // 🔥 من الثيم
+          gradient: AppTheme.primaryGradient,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -142,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen>
             ),
             shape: BoxShape.circle,
             border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 3),
-            boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+            boxShadow: [AppTheme.primaryShadow],
           ),
           child: Icon(
             Icons.person_add,
@@ -153,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         const SizedBox(height: 16),
         Text(
           'إنشاء حساب جديد',
-          style: AppTheme.titleLarge.copyWith( // 🔥 من الثيم
+          style: AppTheme.titleLarge.copyWith(
             shadows: [
               Shadow(
                 color: AppTheme.primaryGreenDark,
@@ -167,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         const SizedBox(height: 8),
         Text(
           'الخدمات الحكومية',
-          style: AppTheme.bodyMedium.copyWith(fontSize: 16), // 🔥 من الثيم
+          style: AppTheme.bodyMedium.copyWith(fontSize: 16),
           textDirection: TextDirection.rtl,
         ),
       ],
@@ -183,7 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 1.5),
-        boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+        boxShadow: [AppTheme.primaryShadow],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -236,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen>
             const SizedBox(height: 6),
             Text(
               title,
-              style: AppTheme.bodyMedium.copyWith( // 🔥 من الثيم
+              style: AppTheme.bodyMedium.copyWith(
                 fontSize: 14,
                 color: AppTheme.white.withOpacity(isSelected ? 1.0 : 0.85),
               ),
@@ -306,17 +306,17 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 1.5),
-        boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+        boxShadow: [AppTheme.primaryShadow],
       ),
       child: TextField(
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
         textDirection: TextDirection.rtl,
-        style: AppTheme.bodyMedium.copyWith(fontSize: 16), // 🔥 من الثيم
+        style: AppTheme.bodyMedium.copyWith(fontSize: 16),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: AppTheme.caption.copyWith(fontSize: 14), // 🔥 من الثيم
+          labelStyle: AppTheme.caption.copyWith(fontSize: 14),
           prefixIcon: Icon(icon, color: AppTheme.white.withOpacity(0.8), size: 20),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -341,16 +341,16 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 1.5),
-        boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+        boxShadow: [AppTheme.primaryShadow],
       ),
       child: TextField(
         controller: controller,
         obscureText: !isVisible,
         textDirection: TextDirection.rtl,
-        style: AppTheme.bodyMedium.copyWith(fontSize: 16), // 🔥 من الثيم
+        style: AppTheme.bodyMedium.copyWith(fontSize: 16),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: AppTheme.caption.copyWith(fontSize: 14), // 🔥 من الثيم
+          labelStyle: AppTheme.caption.copyWith(fontSize: 14),
           prefixIcon: Icon(icon, color: AppTheme.white.withOpacity(0.8), size: 20),
           suffixIcon: IconButton(
             icon: Icon(
@@ -374,8 +374,8 @@ class _RegisterScreenState extends State<RegisterScreen>
       height: 60,
       decoration: BoxDecoration(
         gradient: _isAdmin
-            ? AppTheme.adminGradient // 🔥 من الثيم
-            : AppTheme.loginButtonGradient, // 🔥 من الثيم
+            ? AppTheme.adminGradient
+            : AppTheme.loginButtonGradient,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -415,7 +415,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 const SizedBox(width: 12),
                 Text(
                   'إنشاء الحساب',
-                  style: AppTheme.bodyLarge.copyWith( // 🔥 من الثيم
+                  style: AppTheme.bodyLarge.copyWith(
                     letterSpacing: 0.5,
                   ),
                   textDirection: TextDirection.rtl,
@@ -441,12 +441,12 @@ class _RegisterScreenState extends State<RegisterScreen>
           },
           child: Text(
             'لديك حساب بالفعل؟',
-            style: AppTheme.bodyMedium.copyWith(color: AppTheme.emeraldLight), // 🔥 من الثيم
+            style: AppTheme.bodyMedium.copyWith(color: AppTheme.emeraldLight),
           ),
         ),
         Text(
           ' تسجيل الدخول ',
-          style: AppTheme.caption.copyWith(fontSize: 16), // 🔥 من الثيم
+          style: AppTheme.caption.copyWith(fontSize: 16),
           textDirection: TextDirection.rtl,
         ),
       ],

@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen>
         if (_phoneController.text == '966501234567' && _passwordController.text == '123456') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const LoginScreen()), 
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
           );
         } else {
           _showSnackBar('رقم الهاتف أو كلمة المرور غير صحيحة');
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen>
       SnackBar(
         content: Text(
           message,
-          style: AppTheme.bodyMedium, // 🔥 من الثيم
+          style: AppTheme.bodyMedium,
           textDirection: TextDirection.rtl,
         ),
         backgroundColor: _isAdmin ? AppTheme.adminYellowDark : AppTheme.primaryGreen,
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: AppTheme.primaryGradient, // 🔥 من الثيم الجاهز
+          gradient: AppTheme.primaryGradient,
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen>
             ),
             shape: BoxShape.circle,
             border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 3),
-            boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+            boxShadow: [AppTheme.primaryShadow],
           ),
           child: Icon(
             Icons.account_balance,
@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen>
         const SizedBox(height: 16),
         Text(
           'الخدمات الحكومية',
-          style: AppTheme.titleMedium.copyWith( // 🔥 من الثيم
+          style: AppTheme.titleMedium.copyWith(
             shadows: [
               Shadow(
                 color: AppTheme.primaryGreenDark,
@@ -272,17 +272,17 @@ class _LoginScreenState extends State<LoginScreen>
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 2),
-        boxShadow: [AppTheme.primaryShadow], // 🔥 من الثيم
+        boxShadow: [AppTheme.primaryShadow],
       ),
       child: TextField(
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
         textDirection: TextDirection.rtl,
-        style: AppTheme.bodyLarge.copyWith(fontSize: 18), // 🔥 من الثيم
+        style: AppTheme.bodyLarge.copyWith(fontSize: 18),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: AppTheme.caption.copyWith(fontSize: 16), // 🔥 من الثيم
+          labelStyle: AppTheme.caption.copyWith(fontSize: 16),
           prefixIcon: Icon(icon, color: AppTheme.white.withOpacity(0.8), size: 24),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -299,8 +299,8 @@ class _LoginScreenState extends State<LoginScreen>
       height: 60,
       decoration: BoxDecoration(
         gradient: _isAdmin
-            ? AppTheme.adminGradient // 🔥 من الثيم
-            : AppTheme.loginButtonGradient, // 🔥 من الثيم
+            ? AppTheme.adminGradient
+            : AppTheme.loginButtonGradient,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -356,14 +356,14 @@ class _LoginScreenState extends State<LoginScreen>
       children: [
         Text(
           'ليس لديك حساب؟ ',
-          style: AppTheme.caption.copyWith(fontSize: 16), // 🔥 من الثيم
+          style: AppTheme.caption.copyWith(fontSize: 16),
           textDirection: TextDirection.rtl,
         ),
         GestureDetector(
           onTap: () {},
           child: Text(
             'إنشاء حساب جديد',
-            style: AppTheme.bodyMedium.copyWith(color: AppTheme.emeraldLight), // 🔥 من الثيم
+            style: AppTheme.bodyMedium.copyWith(color: AppTheme.emeraldLight),
           ),
         ),
       ],

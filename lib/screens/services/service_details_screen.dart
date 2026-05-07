@@ -12,8 +12,8 @@ class ServiceDetailsScreen extends StatefulWidget {
 }
 
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
-  // 🔥 استخدام AppTheme بدل الألوان الثابتة
-  // Controllers for form fields
+
+
   final _fullNameController = TextEditingController();
   final _idNumberController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -318,7 +318,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  // 🔥 تم تعديل هذه الدالة - إزالة الظلال من كارد السعر
+
   Widget _buildPriceSection(Map<String, dynamic> service) {
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -717,7 +717,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  // 🔥 تم تعديل هذه الدالة - إزالة الظل من كارد الموافقة
+
   Widget _buildAgreement() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -734,7 +734,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               color: _isAgreed ? AppTheme.primaryGreenLight : AppTheme.borderLight,
               width: _isAgreed ? 2 : 1,
             ),
-            // تم إزالة boxShadow من هنا
+
           ),
           child: Row(
             children: [
