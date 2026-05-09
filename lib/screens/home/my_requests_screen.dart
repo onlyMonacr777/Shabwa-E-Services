@@ -1,151 +1,403 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyRequestsScreen extends StatefulWidget {
+  const MyRequestsScreen({super.key});
+
   @override
-  _MyRequestsScreenState createState() => _MyRequestsScreenState();
+  State<MyRequestsScreen> createState() => _MyRequestsScreenState();
 }
 
 class _MyRequestsScreenState extends State<MyRequestsScreen> {
   int selectedTab = 0;
-  bool isLoading = false;
-
-  final List<List<Map<String, dynamic>>> tabsData = [
-    // نشطة
-    [
-      {'id': 'REQ001', 'title': 'استخراج بطاقة شخصية', 'progress': 0.7, 'status': 'قيد المراجعة'},
-      {'id': 'REQ002', 'title': 'تجديد جواز سفر', 'progress': 0.4, 'status': 'مقبول'},
-    ],
-    // مكتملة
-    [
-      {'id': 'CMP001', 'title': 'شهادة ميلاد', 'progress': 1.0, 'status': 'مكتمل'},
-      {'id': 'CMP002', 'title': 'ترخيص تجاري', 'progress': 1.0, 'status': 'مكتمل'},
-    ],
-    // ملغية
-    [
-      {'id': 'CAN001', 'title': 'بطاقة هوية', 'progress': 0.0, 'status': 'ملغي'},
-    ],
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-      backgroundColor: Color(0xFFF5F7FA),
+      backgroundColor: const Color(0xFFF5F7FA),
+
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'طلباتي',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
-        backgroundColor: Color(0xFF0E7A4A),
+        backgroundColor: const Color(0xFF0E7A4A),
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: () {},
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() => isLoading = true);
-          await Future.delayed(Duration(seconds: 1));
-          setState(() => isLoading = false);
-        },
-        child: Column(
-          children: [
-            // فلتر
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 10,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.search, color: Colors.grey),
-                          SizedBox(width: 10),
-                          Text('ابحث في الطلبات...', style: TextStyle(color: Colors.grey)),
-                        ],
-                      ),
+
+      body: Column(
+        children: [
+
+          // ================= البحث =================
+
+          Container(
+            padding: const EdgeInsets.all(16),
+
+            child: Row(
+              children: [
+
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
-                  ),
-                  SizedBox(width: 12),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+
                     decoration: BoxDecoration(
-                      color: Color(0xFF0E7A4A).withOpacity(0.1),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(25),
+
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
                     ),
+
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.layers, color: Color(0xFF0E7A4A), size: 20),
-                        SizedBox(width: 6),
-                        Text('12', style: TextStyle(
-                          color: Color(0xFF0E7A4A),
-                          fontWeight: FontWeight.bold,
-                        )),
+                      children: const [
+
+                        Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+
+                        SizedBox(width: 10),
+
+                        Text(
+                          'طلباتك الإلكترونية',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            // Tabs
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(child: _tabButton('نشطة', 0, Colors.orange)),
-                  SizedBox(width: 8),
-                  Expanded(child: _tabButton('مكتملة', 1, Colors.green)),
-                  SizedBox(width: 8),
-                  Expanded(child: _tabButton('ملغية', 2, Colors.red)),
-                ],
-              ),
-            ),
+                const SizedBox(width: 12),
 
-            Expanded(
-              child: isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : _requestsList(),
+                // ================= العدد =================
+
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('orders')
+                      .where('uid', isEqualTo: user?.uid)
+                      .snapshots(),
+
+                  builder: (context, snapshot) {
+
+                    int total =
+                        snapshot.data?.docs.length ?? 0;
+
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0E7A4A)
+                            .withOpacity(0.1),
+
+                        borderRadius:
+                        BorderRadius.circular(25),
+                      ),
+
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+
+                        children: [
+
+                          const Icon(
+                            Icons.layers,
+                            color: Color(0xFF0E7A4A),
+                            size: 20,
+                          ),
+
+                          const SizedBox(width: 6),
+
+                          Text(
+                            total.toString(),
+
+                            style: const TextStyle(
+                              color: Color(0xFF0E7A4A),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          // ================= Tabs =================
+
+          Container(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 16),
+
+            child: Row(
+              children: [
+
+                Expanded(
+                  child: _tabButton(
+                    'نشطة',
+                    0,
+                    Colors.orange,
+                  ),
+                ),
+
+                const SizedBox(width: 8),
+
+                Expanded(
+                  child: _tabButton(
+                    'مكتملة',
+                    1,
+                    Colors.green,
+                  ),
+                ),
+
+                const SizedBox(width: 8),
+
+                Expanded(
+                  child: _tabButton(
+                    'ملغية',
+                    2,
+                    Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ================= الطلبات =================
+
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .where('uid', isEqualTo: user?.uid)
+                  .snapshots(),
+
+              builder: (context, snapshot) {
+
+                // تحميل
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // لا يوجد بيانات
+                if (!snapshot.hasData ||
+                    snapshot.data!.docs.isEmpty) {
+
+                  return _emptyState();
+                }
+
+                // ================= البيانات =================
+
+                final docs = snapshot.data!.docs;
+
+                // ترتيب من الأحدث للأقدم
+                docs.sort((a, b) {
+
+                  final aData =
+                  a.data() as Map<String, dynamic>;
+
+                  final bData =
+                  b.data() as Map<String, dynamic>;
+
+                  final aTime = aData['createdAt'];
+                  final bTime = bData['createdAt'];
+
+                  if (aTime == null || bTime == null) {
+                    return 0;
+                  }
+
+                  return (bTime as Timestamp)
+                      .compareTo(aTime as Timestamp);
+                });
+
+                // ================= الفلترة =================
+
+                final filteredDocs =
+                docs.where((doc) {
+
+                  final data =
+                  doc.data() as Map<String, dynamic>;
+
+                  final status =
+                      data['status'] ?? 'pending';
+
+                  // نشطة
+                  if (selectedTab == 0) {
+
+                    return status == 'pending' ||
+                        status == 'approved';
+                  }
+
+                  // مكتملة
+                  if (selectedTab == 1) {
+
+                    return status == 'completed';
+                  }
+
+                  // ملغية
+                  return status == 'rejected';
+
+                }).toList();
+
+                if (filteredDocs.isEmpty) {
+                  return _emptyState();
+                }
+
+                return ListView.separated(
+
+                  padding: const EdgeInsets.all(16),
+
+                  itemCount: filteredDocs.length,
+
+                  separatorBuilder: (_, __) =>
+                  const SizedBox(height: 16),
+
+                  itemBuilder: (context, index) {
+
+                    final data =
+                    filteredDocs[index].data()
+                    as Map<String, dynamic>;
+
+                    return _requestCard(data);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _tabButton(String title, int index, Color color) {
+  // ================= EMPTY =================
+
+  Widget _emptyState() {
+
+    return Center(
+      child: Column(
+        mainAxisAlignment:
+        MainAxisAlignment.center,
+
+        children: [
+
+          Icon(
+            Icons.inbox_outlined,
+            size: 80,
+            color: Colors.grey.shade400,
+          ),
+
+          const SizedBox(height: 16),
+
+          const Text(
+            'لا توجد طلبات',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey,
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          Text(
+            'ستظهر طلباتك هنا',
+            style: TextStyle(
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ================= TAB BUTTON =================
+
+  Widget _tabButton(
+      String title,
+      int index,
+      Color color,
+      ) {
+
     bool active = selectedTab == index;
+
     return GestureDetector(
-      onTap: () => setState(() => selectedTab = index),
+
+      onTap: () {
+
+        setState(() {
+          selectedTab = index;
+        });
+      },
+
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: active ? color.withOpacity(0.15) : Colors.transparent,
-          borderRadius: BorderRadius.circular(25),
-          border: active ? Border.all(color: color, width: 2) : null,
+
+        padding: const EdgeInsets.symmetric(
+          vertical: 14,
         ),
+
+        decoration: BoxDecoration(
+
+          color: active
+              ? color.withOpacity(0.15)
+              : Colors.transparent,
+
+          borderRadius: BorderRadius.circular(25),
+
+          border: active
+              ? Border.all(
+            color: color,
+            width: 2,
+          )
+              : null,
+        ),
+
         child: Text(
+
           title,
+
           textAlign: TextAlign.center,
+
           style: TextStyle(
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
-            color: active ? color : Colors.grey[600],
+            fontWeight: active
+                ? FontWeight.bold
+                : FontWeight.normal,
+
+            color: active
+                ? color
+                : Colors.grey[600],
+
             fontSize: 14,
           ),
         ),
@@ -153,156 +405,283 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
     );
   }
 
-  Widget _requestsList() {
-    final requests = tabsData[selectedTab];
+  // ================= CARD =================
 
-    if (requests.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inbox_outlined, size: 80, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('لا توجد طلبات',
-                style: TextStyle(fontSize: 18, color: Colors.grey)),
-            Text('ستظهر طلباتك هنا',
-                style: TextStyle(color: Colors.grey[600])),
-          ],
-        ),
-      );
+  Widget _requestCard(
+      Map<String, dynamic> request,
+      ) {
+
+    final status =
+        request['status'] ?? 'pending';
+
+    Color statusColor;
+    String statusText;
+    double progress;
+
+    // approved
+    if (status == 'approved') {
+
+      statusColor = Colors.blue;
+      statusText = 'مقبول';
+      progress = 0.7;
     }
 
-    return ListView.separated(
-      padding: EdgeInsets.all(16),
-      itemCount: requests.length,
-      separatorBuilder: (context, index) => SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final request = requests[index];
-        return _requestCard(request);
-      },
-    );
-  }
+    // completed
+    else if (status == 'completed') {
 
-  Widget _requestCard(Map<String, dynamic> request) {
-    Color getStatusColor(String status) {
-      switch (status) {
-        case 'قيد المراجعة': return Colors.orange;
-        case 'مقبول': return Colors.blue;
-        case 'مكتمل': return Colors.green;
-        case 'ملغي': return Colors.red;
-        default: return Colors.grey;
-      }
+      statusColor = Colors.green;
+      statusText = 'مكتمل';
+      progress = 1.0;
+    }
+
+    // rejected
+    else if (status == 'rejected') {
+
+      statusColor = Colors.red;
+      statusText = 'ملغي';
+      progress = 0.2;
+    }
+
+    // pending
+    else {
+
+      statusColor = Colors.orange;
+      statusText = 'قيد المراجعة';
+      progress = 0.4;
     }
 
     return Container(
+
       decoration: BoxDecoration(
+
         color: Colors.white,
+
         borderRadius: BorderRadius.circular(16),
+
         boxShadow: [
+
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
             blurRadius: 20,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
+
       child: Padding(
-        padding: EdgeInsets.all(20),
+
+        padding: const EdgeInsets.all(20),
+
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
           children: [
-            // Header
+
+            // ================= Header =================
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
+
               children: [
+
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF0E7A4A).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
+
+                  padding:
+                  const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
                   ),
+
+                  decoration: BoxDecoration(
+
+                    color: const Color(0xFF0E7A4A)
+                        .withOpacity(0.2),
+
+                    borderRadius:
+                    BorderRadius.circular(20),
+                  ),
+
                   child: Text(
-                    request['id'],
-                    style: TextStyle(
+
+                    request['orderId'] ?? '',
+
+                    style: const TextStyle(
                       color: Color(0xFF0E7A4A),
                       fontWeight: FontWeight.bold,
                       fontSize: 13,
                     ),
                   ),
                 ),
+
                 Text(
-                  '2024-01-15',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+
+                  statusText,
+
+                  style: TextStyle(
+                    color: statusColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            // Title
+
+            const SizedBox(height: 16),
+
+            // ================= Title =================
+
             Text(
-              request['title'],
-              style: TextStyle(
+
+              request['serviceTitle'] ?? '',
+
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            SizedBox(height: 20),
-            // Progress
-            Row(
-              children: [
-                Expanded(
-                  child: LinearProgressIndicator(
-                    value: request['progress'],
-                    backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      getStatusColor(request['status']),
-                    ),
-                    minHeight: 8,
-                  ),
-                ),
-              ],
+
+            const SizedBox(height: 20),
+
+            // ================= Progress =================
+
+            LinearProgressIndicator(
+
+              value: progress,
+
+              backgroundColor: Colors.grey[300],
+
+              valueColor:
+              AlwaysStoppedAnimation<Color>(
+                statusColor,
+              ),
+
+              minHeight: 8,
             ),
-            SizedBox(height: 12),
+
+            const SizedBox(height: 12),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+              MainAxisAlignment.spaceBetween,
+
               children: [
+
                 Text(
-                  request['status'],
+
+                  statusText,
+
                   style: TextStyle(
-                    color: getStatusColor(request['status']),
+                    color: statusColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
                 ),
+
                 Text(
-                  '${(request['progress'] * 100).toInt()}%',
-                  style: TextStyle(
+
+                  '${(progress * 100).toInt()}%',
+
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            // Button
+
+            const SizedBox(height: 20),
+
+            // ================= التفاصيل =================
+
             SizedBox(
+
               width: double.infinity,
+
               child: ElevatedButton(
+
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('فتح تفاصيل ${request['title']}')),
+
+                  showDialog(
+
+                    context: context,
+
+                    builder: (_) {
+
+                      return AlertDialog(
+
+                        title:
+                        const Text('تفاصيل الطلب'),
+
+                        content: Column(
+
+                          mainAxisSize: MainAxisSize.min,
+
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+
+                          children: [
+
+                            Text(
+                              'الخدمة: ${request['serviceTitle']}',
+                            ),
+
+                            Text(
+                              'الحالة: $statusText',
+                            ),
+
+                            Text(
+                              'رقم الطلب: ${request['orderId']}',
+                            ),
+
+                            Text(
+                              'الاسم: ${request['fullName']}',
+                            ),
+                          ],
+                        ),
+
+                        actions: [
+
+                          TextButton(
+
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+
+                            child:
+                            const Text('إغلاق'),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
+
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0E7A4A),
+
+                  backgroundColor:
+                  const Color(0xFF0E7A4A),
+
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+
+                  padding:
+                  const EdgeInsets.symmetric(
+                    vertical: 16,
                   ),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(12),
+                  ),
+
                   elevation: 2,
                 ),
-                child: Text('عرض التفاصيل'),
+
+                child: const Text(
+                  'عرض التفاصيل',
+                ),
               ),
             ),
           ],

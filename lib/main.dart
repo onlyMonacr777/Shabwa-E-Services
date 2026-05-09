@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
+
 import 'core/theme/app_colors.dart';
 import 'screens/splash/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -8,7 +12,13 @@ import 'screens/home/my_requests_screen.dart';
 import 'screens/admin/admin_dashboard.dart';
 import 'screens/services/services_list_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -36,43 +46,69 @@ class PreviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, Widget>> screens = [
-     {'name': SplashScreen(), 'widget':  SplashScreen()},
-     {'name': LoginScreen(), 'widget':  LoginScreen()},
-     {'name': RegisterScreen(), 'widget': const RegisterScreen()},
-    // {'name': HomeScreen(), 'widget':  HomeScreen()},
-      {'name': MyRequestsScreen(), 'widget':  MyRequestsScreen()},
-    {'name': ServicesListScreen(), 'widget': const ServicesListScreen()},
-     {'name': AdminDashboard(), 'widget': const AdminDashboard()},
+      {
+        'name': const SplashScreen(),
+        'widget': const SplashScreen(),
+      },
+      {
+        'name': LoginScreen(),
+        'widget': LoginScreen(),
+      },
+      {
+        'name': const RegisterScreen(),
+        'widget': const RegisterScreen(),
+      },
+      {
+        'name': MyRequestsScreen(),
+        'widget': MyRequestsScreen(),
+      },
+      {
+        'name': const ServicesListScreen(),
+        'widget': const ServicesListScreen(),
+      },
+      {
+        'name': const AdminDashboard(),
+        'widget': const AdminDashboard(),
+      },
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('معاينة الشاشات'),
-       // backgroundColor: AppColors.ocean,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: screens.length,
         itemBuilder: (context, index) {
           final screen = screens[index];
+
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
               leading: CircleAvatar(
-             //   backgroundColor: AppColors.ocean,
-                child: Text('${index + 1}',
-                    style: const TextStyle(color: Colors.white)),
+                child: Text(
+                  '${index + 1}',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
               title: Text(
-                screen['name']!.runtimeType.toString().replaceAll('Screen', ''),
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                screen['name']!.runtimeType
+                    .toString()
+                    .replaceAll('Screen', ''),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               trailing: const Icon(
-                  Icons.arrow_forward_ios, color: Colors.blueGrey),
+                Icons.arrow_forward_ios,
+                color: Colors.blueGrey,
+              ),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => screen['widget']!),
+                  MaterialPageRoute(
+                    builder: (context) => screen['widget']!,
+                  ),
                 );
               },
             ),
@@ -80,5 +116,5 @@ class PreviewScreen extends StatelessWidget {
         },
       ),
     );
-  }}
-
+  }
+}

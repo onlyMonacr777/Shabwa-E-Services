@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shabwa_e_services/screens/home/my_requests_screen.dart';
 import '/core/theme/app_theme.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
@@ -12,8 +15,6 @@ class ServiceDetailsScreen extends StatefulWidget {
 }
 
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
-
-
   final _fullNameController = TextEditingController();
   final _idNumberController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -21,9 +22,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
 
-  // Uploaded documents tracking
   final Map<String, bool> _uploadedDocs = {};
   bool _isAgreed = false;
+
+  String? _orderId; // ✅ مهم
 
   @override
   void initState() {
@@ -53,6 +55,107 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         _isAgreed;
   }
 
+  // ================= FIREBASE ORDER =================
+  // ================= FIREBASE ORDER =================
+  Future<void> _submitOrder() async {
+    if (!_isFormValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error_outline, color: AppTheme.white),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'يرجى تعبئة جميع الحقول ورفع المستندات المطلوبة',
+                  style: AppTheme.caption.copyWith(
+                    color: AppTheme.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: AppTheme.primaryGreenDark,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      setState(() {});
+
+      // ✅ إنشاء رقم طلب فريد
+      _orderId = DateTime.now()
+          .millisecondsSinceEpoch
+          .toString()
+          .substring(5, 13);
+
+      // ✅ استخراج المستندات المرفوعة
+      final uploadedDocuments = _uploadedDocs.entries
+          .where((e) => e.value == true)
+          .map((e) => e.key)
+          .toList();
+
+      // ✅ حفظ الطلب
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(_orderId)
+          .set({
+        // معلومات الطلب
+        "orderId": _orderId,
+        "status": "pending",
+        "createdAt": FieldValue.serverTimestamp(),
+
+        // معلومات المستخدم
+        "uid": user?.uid ?? "",
+        "accountEmail": user?.email ?? "",
+
+        // بيانات النموذج
+        "fullName": _fullNameController.text.trim(),
+        "idNumber": _idNumberController.text.trim(),
+        "phone": _phoneController.text.trim(),
+        "userEmail": _emailController.text.trim(),
+        "address": _addressController.text.trim(),
+        "notes": _notesController.text.trim(),
+
+        // معلومات الخدمة
+        "serviceTitle": widget.service['title'],
+        "serviceType": widget.service['category'],
+        "servicePrice": widget.service['price'],
+        "serviceCurrency": widget.service['currency'],
+        "serviceTime": widget.service['time'],
+
+        // المستندات
+        "requiredDocs": widget.service['requiredDocs'],
+        "uploadedDocs": uploadedDocuments,
+
+        // إضافات للنظام
+        "isReviewed": false,
+        "reviewedAt": null,
+        "reviewedBy": null,
+      });
+
+      // ✅ إظهار النجاح
+      _showSuccessDialog();
+
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'حدث خطأ أثناء إرسال الطلب',
+            style: AppTheme.bodyMedium.copyWith(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+  // ================= SUCCESS DIALOG =================
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -74,39 +177,36 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppTheme.primaryGreenLight.withOpacity(0.3), AppTheme.emeraldLight.withOpacity(0.2)],
+                    colors: [
+                      AppTheme.primaryGreenLight.withOpacity(0.3),
+                      AppTheme.emeraldLight.withOpacity(0.2)
+                    ],
                   ),
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppTheme.primaryGreen, width: 2),
+                  border: Border.all(
+                      color: AppTheme.primaryGreen, width: 2),
                 ),
-                child: const Icon(Icons.check, color: AppTheme.white, size: 40),
+                child: const Icon(
+                  Icons.check,
+                  color: AppTheme.white,
+                  size: 40,
+                ),
               ),
               const SizedBox(height: 20),
               Text(
                 'تم إرسال طلبك بنجاح!',
                 style: AppTheme.titleMedium.copyWith(
                   color: AppTheme.textDark,
-                  height: 1.2,
                 ),
                 textDirection: TextDirection.rtl,
               ),
               const SizedBox(height: 8),
               Text(
-                'رقم طلبك: #${DateTime.now().millisecondsSinceEpoch.toString().substring(5, 13)}',
+                'رقم طلبك: #${_orderId ?? ""}',
                 style: AppTheme.bodyMedium.copyWith(
                   color: AppTheme.primaryGreen,
                   fontWeight: FontWeight.bold,
                 ),
-                textDirection: TextDirection.rtl,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'سيتم مراجعة طلبك والتواصل معك قريباً',
-                textAlign: TextAlign.center,
-                style: AppTheme.caption.copyWith(
-                  color: AppTheme.textLight,
-                ),
-                textDirection: TextDirection.rtl,
               ),
               const SizedBox(height: 24),
               GestureDetector(
@@ -115,12 +215,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                   Navigator.pop(context);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14, horizontal: 32),
                   decoration: BoxDecoration(
                     gradient: AppTheme.primaryGradient,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.4)),
-                    boxShadow: [AppTheme.primaryShadow],
                   ),
                   child: Text(
                     'العودة للرئيسية',
@@ -128,7 +227,6 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       color: AppTheme.white,
                       fontWeight: FontWeight.bold,
                     ),
-                    textDirection: TextDirection.rtl,
                   ),
                 ),
               ),
@@ -139,26 +237,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
-  void _submitOrder() {
-    if (!_isFormValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.error_outline, color: AppTheme.white),
-              const SizedBox(width: 8),
-              Text('يرجى تعبئة جميع الحقول ورفع المستندات المطلوبة', style: AppTheme.caption.copyWith(color: AppTheme.white)),
-            ],
-          ),
-          backgroundColor: AppTheme.primaryGreenDark,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
-      return;
-    }
-    _showSuccessDialog();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -773,6 +852,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     );
   }
 
+  // زر الإرسال فقط مربوط بالفايربيس
   Widget _buildSubmitButton() {
     final isValid = _isFormValid;
 
@@ -785,12 +865,13 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
           decoration: BoxDecoration(
             gradient: isValid
                 ? AppTheme.primaryGradient
-                : LinearGradient(colors: [AppTheme.primaryGreen.withOpacity(0.3), AppTheme.primaryGreenDark.withOpacity(0.2)]),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isValid ? AppTheme.primaryGreen.withOpacity(0.4) : Colors.transparent,
+                : LinearGradient(
+              colors: [
+                AppTheme.primaryGreen.withOpacity(0.3),
+                AppTheme.primaryGreenDark.withOpacity(0.2)
+              ],
             ),
-            boxShadow: isValid ? [AppTheme.primaryShadow] : [],
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -798,21 +879,18 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               Icon(
                 isValid ? Icons.check_circle : Icons.lock_outline,
                 color: AppTheme.white,
-                size: 20,
               ),
               const SizedBox(width: 8),
               Text(
-                isValid ? 'تأكيد وإرسال الطلب' : 'أكمل جميع الحقول المطلوبة',
+                isValid ? 'تأكيد وإرسال الطلب' : 'أكمل جميع الحقول',
                 style: AppTheme.bodyMedium.copyWith(
                   color: AppTheme.white,
                   fontWeight: FontWeight.bold,
                 ),
-                textDirection: TextDirection.rtl,
               ),
             ],
           ),
         ),
       ),
     );
-  }
-}
+}}

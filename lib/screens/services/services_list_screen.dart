@@ -56,7 +56,10 @@ class _ServicesListScreenState extends State<ServicesListScreen>
 
   @override
   Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).viewPadding.bottom + 100;
+    final bottomPadding = MediaQuery
+        .of(context)
+        .viewPadding
+        .bottom + 100;
 
     return Scaffold(
       body: Container(
@@ -70,7 +73,8 @@ class _ServicesListScreenState extends State<ServicesListScreen>
               const SliverToBoxAdapter(child: ServicesHeader()),
               SliverToBoxAdapter(
                 child: ServicesSearchBar(
-                  onSearchChanged: (value) => setState(() => _searchQuery = value),
+                  onSearchChanged: (value) =>
+                      setState(() => _searchQuery = value),
                 ),
               ),
               SliverToBoxAdapter(
@@ -85,14 +89,17 @@ class _ServicesListScreenState extends State<ServicesListScreen>
                     {'name': 'التجارة', 'icon': Icons.business_center},
                   ],
                   selectedCategory: _selectedCategory,
-                  onCategorySelected: (category) => setState(() => _selectedCategory = category),
+                  onCategorySelected: (category) =>
+                      setState(() => _selectedCategory = category),
                 ),
               ),
               SliverToBoxAdapter(
-                child: ServicesSectionTitle(servicesCount: filteredServices.length),
+                child: ServicesSectionTitle(
+                    servicesCount: filteredServices.length),
               ),
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 8),
                 sliver: ServicesGrid(
                   services: filteredServices,
                   animationController: _animationController,
@@ -100,12 +107,13 @@ class _ServicesListScreenState extends State<ServicesListScreen>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ServiceDetailsScreen(
-                          service: {
-                            ...service.toMap(),
-                            'image': imagePath,
-                          },
-                        ),
+                        builder: (_) =>
+                            ServiceDetailsScreen(
+                              service: {
+                                ...service.toMap(),
+                                'image': imagePath,
+                              },
+                            ),
                       ),
                     );
                   },
@@ -116,9 +124,30 @@ class _ServicesListScreenState extends State<ServicesListScreen>
           ),
         ),
       ),
+
+
       bottomNavigationBar: ServicesBottomNav(
         selectedIndex: _selectedIndex,
-        onIndexChanged: (index) => setState(() => _selectedIndex = index),
+        onIndexChanged: (index) {
+          setState(() => _selectedIndex = index);
+
+          // الرئيسية
+          if (index == 0) {
+            return;
+          }
+
+          // طلباتي
+          if (index == 1) {
+            Navigator.pushNamed(context, '/my-orders');
+          }
+
+          // الحساب
+          if (index == 2) {
+            Navigator.pushNamed(context, '/profile');
+          }
+        },
+
+
       ),
     );
   }
