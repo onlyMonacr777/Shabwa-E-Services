@@ -1,50 +1,54 @@
 import 'package:flutter/material.dart';
 
-class RequestStatusChip extends StatelessWidget {
-  final String status;
+class UserTileWidget extends StatelessWidget {
 
-  const RequestStatusChip({
+  final String name;
+  final String email;
+
+  const UserTileWidget({
     super.key,
-    required this.status,
+    required this.name,
+    required this.email,
   });
-
-  Color getColor() {
-    switch (status) {
-      case 'approved':
-        return Colors.green;
-
-      case 'rejected':
-        return Colors.red;
-
-      default:
-        return Colors.orange;
-    }
-  }
-
-  String getText() {
-    switch (status) {
-      case 'approved':
-        return 'مقبول';
-
-      case 'rejected':
-        return 'مرفوض';
-
-      default:
-        return 'قيد المراجعة';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: getColor().withOpacity(0.15),
 
-      label: Text(
-        getText(),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+        BorderRadius.circular(16),
+      ),
 
-        style: TextStyle(
-          color: getColor(),
-          fontWeight: FontWeight.bold,
+      child: ListTile(
+        leading: const CircleAvatar(
+          child: Icon(Icons.person),
+        ),
+
+        title: Text(
+          name,
+          textDirection:
+          TextDirection.rtl,
+        ),
+
+        subtitle: Text(
+          email,
+          textDirection:
+          TextDirection.rtl,
+        ),
+
+        trailing: PopupMenuButton(
+          itemBuilder: (_) => [
+            const PopupMenuItem(
+              value: 'delete',
+              child: Text('حذف'),
+            ),
+
+            const PopupMenuItem(
+              value: 'block',
+              child: Text('حظر'),
+            ),
+          ],
         ),
       ),
     );

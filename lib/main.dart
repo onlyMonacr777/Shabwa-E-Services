@@ -1,25 +1,24 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/main.dart';
 
 import 'firebase_options.dart';
 
-import 'core/theme/app_colors.dart';
+import 'providers/auth_provider.dart';
+import 'providers/navigation_provider.dart';
+import 'providers/requests_provider.dart';
+import 'providers/services_provider.dart';
+
 import 'screens/splash/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
-import 'screens/auth/register_screen.dart';
-import 'screens/home/home_screen.dart';
-import 'screens/home/my_requests_screen.dart';
 import 'screens/admin/admin_dashboard.dart';
-import 'screens/services/services_list_screen.dart';
+import 'screens/services/services_list_screen.dart' hide AdminDashboard;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(const MyApp());
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,94 +26,97 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'بوابة شبوة - Preview',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: true,
-      ),
-      home: const PreviewScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NavigationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ServicesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RequestsProvider(),
+        ),
+      ],
+      child: const ShabwaEServicesApp(),
     );
   }
 }
 
-// ========== شاشة المعاينة ==========
-class PreviewScreen extends StatelessWidget {
-  const PreviewScreen({super.key});
+class ShabwaEServicesApp extends StatelessWidget {
+  const ShabwaEServicesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, Widget>> screens = [
-      {
-        'name': const SplashScreen(),
-        'widget': const SplashScreen(),
-      },
-      {
-        'name': LoginScreen(),
-        'widget': LoginScreen(),
-      },
-      {
-        'name': const RegisterScreen(),
-        'widget': const RegisterScreen(),
-      },
-      {
-        'name': MyRequestsScreen(),
-        'widget': MyRequestsScreen(),
-      },
-      {
-        'name': const ServicesListScreen(),
-        'widget': const ServicesListScreen(),
-      },
-      {
-        'name': const AdminDashboard(),
-        'widget': const AdminDashboard(),
-      },
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('معاينة الشاشات'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'بوابة شبوة للخدمات الإلكترونية',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        useMaterial3: true,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: screens.length,
-        itemBuilder: (context, index) {
-          final screen = screens[index];
+      home: const AppStartup(),
+    );
+  }
+}
 
-          return Card(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Text(
-                  '${index + 1}',
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-              title: Text(
-                screen['name']!.runtimeType
-                    .toString()
-                    .replaceAll('Screen', ''),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.blueGrey,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => screen['widget']!,
-                  ),
-                );
-              },
-            ),
-          );
-        },
+class AppStartup extends StatefulWidget {
+  const AppStartup({super.key});
+
+  @override
+  State<AppStartup> createState() => _AppStartupState();
+}
+
+class _AppStartupState extends State<AppStartup> {
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const SplashFlowHandler(),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const SplashScreen();
+  }
+}
+
+class SplashFlowHandler extends StatelessWidget {
+  const SplashFlowHandler({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider =
+    Provider.of<AuthProvider>(context);
+
+    if (!authProvider.isLoggedIn) {
+      return const LoginScreen();
+    }
+
+    final bool isAdmin =
+        authProvider.userRole == 'admin';
+
+    if (isAdmin) {
+      return const AdminDashboard();
+    }
+
+    return const ServicesListScreen();
   }
 }

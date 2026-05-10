@@ -10,7 +10,9 @@ class RequestsProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
-
+  // ==============================
+  // Fetch Requests
+  // ==============================
   Future<void> fetchRequests() async {
 
     try {
@@ -43,12 +45,17 @@ class RequestsProvider extends ChangeNotifier {
     }
   }
 
+  // ==============================
+  // Total Requests
+  // ==============================
   int get totalRequests {
 
     return requests.length;
   }
 
-
+  // ==============================
+  // Completed Requests
+  // ==============================
   int get completedRequests {
 
     return requests
@@ -60,7 +67,9 @@ class RequestsProvider extends ChangeNotifier {
         .length;
   }
 
-
+  // ==============================
+  // Pending Requests
+  // ==============================
   int get pendingRequests {
 
     return requests

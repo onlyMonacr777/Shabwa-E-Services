@@ -1,8 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '/core/theme/app_theme.dart';
 
-class ServicesHeader extends StatelessWidget {
+class ServicesHeader extends StatefulWidget {
   const ServicesHeader({super.key});
+
+  @override
+  State<ServicesHeader> createState() => _ServicesHeaderState();
+}
+
+class _ServicesHeaderState extends State<ServicesHeader> {
+  String userName = 'مستخدم';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (doc.exists) {
+          setState(() {
+            userName = doc.data()?['name'] ?? 'مستخدم';
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +66,25 @@ class ServicesHeader extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.white.withOpacity(0.2), AppTheme.white.withOpacity(0.1)],
+          colors: [
+            AppTheme.white.withOpacity(0.2),
+            AppTheme.white.withOpacity(0.1),
+          ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 2),
+        border: Border.all(
+          color: AppTheme.white.withOpacity(0.6),
+          width: 2,
+        ),
         boxShadow: [AppTheme.primaryShadow],
       ),
       child: Stack(
         children: [
-          Icon(Icons.notifications_outlined, color: AppTheme.emeraldLight, size: 24),
+          Icon(
+            Icons.notifications_outlined,
+            color: AppTheme.emeraldLight,
+            size: 24,
+          ),
           Positioned(
             right: 4,
             top: 4,
@@ -60,7 +107,7 @@ class ServicesHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'مرحباً، أحمد',
+          'مرحباً، $userName',
           style: AppTheme.titleMedium.copyWith(height: 1.2),
           textDirection: TextDirection.rtl,
         ),
@@ -79,10 +126,16 @@ class ServicesHeader extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.white.withOpacity(0.25), AppTheme.white.withOpacity(0.15)],
+          colors: [
+            AppTheme.white.withOpacity(0.25),
+            AppTheme.white.withOpacity(0.15),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppTheme.white.withOpacity(0.6), width: 2),
+        border: Border.all(
+          color: AppTheme.white.withOpacity(0.6),
+          width: 2,
+        ),
         boxShadow: [AppTheme.primaryShadow],
       ),
       child: Column(
@@ -94,7 +147,9 @@ class ServicesHeader extends StatelessWidget {
               _buildNewBadge(),
               Text(
                 'إحصائيات طلباتك',
-                style: AppTheme.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                style: AppTheme.bodyLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
                 textDirection: TextDirection.rtl,
               ),
             ],
@@ -102,11 +157,37 @@ class ServicesHeader extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _statItem('طلباتي', '3', Icons.folder_open_outlined)),
-              Container(width: 1, height: 50, color: AppTheme.white.withOpacity(0.3)),
-              Expanded(child: _statItem('مكتملة', '1', Icons.check_circle_outline)),
-              Container(width: 1, height: 50, color: AppTheme.white.withOpacity(0.3)),
-              Expanded(child: _statItem('قيد المراجعة', '2', Icons.access_time)),
+              Expanded(
+                child: _statItem(
+                  'طلباتي',
+                  '3',
+                  Icons.folder_open_outlined,
+                ),
+              ),
+              Container(
+                width: 1,
+                height: 50,
+                color: AppTheme.white.withOpacity(0.3),
+              ),
+              Expanded(
+                child: _statItem(
+                  'مكتملة',
+                  '1',
+                  Icons.check_circle_outline,
+                ),
+              ),
+              Container(
+                width: 1,
+                height: 50,
+                color: AppTheme.white.withOpacity(0.3),
+              ),
+              Expanded(
+                child: _statItem(
+                  'قيد المراجعة',
+                  '2',
+                  Icons.access_time,
+                ),
+              ),
             ],
           ),
         ],
@@ -116,43 +197,72 @@ class ServicesHeader extends StatelessWidget {
 
   Widget _buildNewBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppTheme.emeraldLight.withOpacity(0.3), AppTheme.emeraldLight.withOpacity(0.1)],
+          colors: [
+            AppTheme.emeraldLight.withOpacity(0.3),
+            AppTheme.emeraldLight.withOpacity(0.1),
+          ],
         ),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.emeraldLight.withOpacity(0.5), width: 1),
+        border: Border.all(
+          color: AppTheme.emeraldLight.withOpacity(0.5),
+          width: 1,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             'جديد',
-            style: AppTheme.caption.copyWith(fontWeight: FontWeight.bold),
+            style: AppTheme.caption.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(width: 6),
-          Icon(Icons.circle, color: AppTheme.white, size: 8),
+          Icon(
+            Icons.circle,
+            color: AppTheme.white,
+            size: 8,
+          ),
         ],
       ),
     );
   }
 
-  Widget _statItem(String label, String value, IconData icon) {
+  Widget _statItem(
+      String label,
+      String value,
+      IconData icon,
+      ) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppTheme.emeraldLight.withOpacity(0.3), AppTheme.primaryGreenLight.withOpacity(0.2)],
+              colors: [
+                AppTheme.emeraldLight.withOpacity(0.3),
+                AppTheme.primaryGreenLight.withOpacity(0.2),
+              ],
             ),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppTheme.white, size: 22),
+          child: Icon(
+            icon,
+            color: AppTheme.white,
+            size: 22,
+          ),
         ),
         const SizedBox(height: 8),
-        Text(value, style: AppTheme.bodyLarge.copyWith(fontSize: 20)),
+        Text(
+          value,
+          style: AppTheme.bodyLarge.copyWith(fontSize: 20),
+        ),
         const SizedBox(height: 4),
         Text(
           label,

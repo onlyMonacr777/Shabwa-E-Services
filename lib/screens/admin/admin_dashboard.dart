@@ -12,6 +12,13 @@ class AdminDashboard extends StatelessWidget {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> _servicesStream() {
+    return FirebaseFirestore.instance
+        .collection('services')
+        .orderBy('createdAt', descending: true)
+        .snapshots();
+  }
+
   Future<void> _changeStatus(
       String docId,
       String status,
@@ -29,6 +36,20 @@ class AdminDashboard extends StatelessWidget {
       'createdAt': FieldValue.serverTimestamp(),
       'read': false,
     });
+  }
+
+  // ✅ إضافة خدمة جديدة
+  Future<void> _addService(Map<String, dynamic> serviceData) async {
+    await FirebaseFirestore.instance.collection('services').add({
+      ...serviceData,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // ✅ حذف خدمة
+  Future<void> _deleteService(String serviceId) async {
+    await FirebaseFirestore.instance.collection('services').doc(serviceId).delete();
   }
 
   String _statusText(String status) {
@@ -53,7 +74,7 @@ class AdminDashboard extends StatelessWidget {
       case 'approved':
         return const Color(0xFF22C55E);
       case 'rejected':
-        return const Color(0xFFEF4444);
+        return const Color(0xEF4444);
       case 'review':
         return const Color(0xFF3B82F6);
       case 'completed':
@@ -174,6 +195,10 @@ class AdminDashboard extends StatelessWidget {
                   slivers: [
                     SliverToBoxAdapter(
                       child: _buildHeader(docs.length),
+                    ),
+                    // ✅ زر إضافة خدمة
+                    SliverToBoxAdapter(
+                      child: _buildAddServiceButton(context),
                     ),
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -317,6 +342,200 @@ class AdminDashboard extends StatelessWidget {
       ),
     );
   }
+
+  // ✅ زر إضافة خدمة
+  Widget _buildAddServiceButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () => _showAddServiceDialog(context),
+              icon: const Icon(Icons.add_circle_rounded, color: Colors.white),
+              label: const Text(
+                'إضافة خدمة جديدة',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF22C55E),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 4,
+                shadowColor: const Color(0xFF22C55E).withOpacity(0.4),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ✅ ديالوج إضافة خدمة
+  void _showAddServiceDialog(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    final priceController = TextEditingController();
+    final categoryController = TextEditingController();
+    final timeController = TextEditingController();
+    final imageController = TextEditingController();
+    final currencyController = TextEditingController(text: 'ريال');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'إضافة خدمة جديدة',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.right,
+        ),
+        content: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildTextField(titleController, 'عنوان الخدمة', Icons.title),
+                const SizedBox(height: 12),
+                _buildTextField(descriptionController, 'الوصف', Icons.description),
+                const SizedBox(height: 12),
+                _buildTextField(priceController, 'السعر', Icons.attach_money, isNumber: true),
+                const SizedBox(height: 12),
+                _buildTextField(categoryController, 'التصنيف', Icons.category),
+                const SizedBox(height: 12),
+                _buildTextField(timeController, 'المدة', Icons.timer),
+                const SizedBox(height: 12),
+                _buildTextField(imageController, 'مسار الصورة', Icons.image),
+                const SizedBox(height: 12),
+                _buildTextField(currencyController, 'العملة', Icons.money),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء', style: TextStyle(color: Colors.white70)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                await _addService({
+                  'title': titleController.text.trim(),
+                  'description': descriptionController.text.trim(),
+                  'price': double.tryParse(priceController.text.trim()) ?? 0,
+                  'category': categoryController.text.trim(),
+                  'time': timeController.text.trim(),
+                  'image': imageController.text.trim(),
+                  'currency': currencyController.text.trim(),
+                  'requiredDocs': ['صورة الهوية'],
+                  'likes': 0,
+                });
+                if (context.mounted) Navigator.pop(context);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF22C55E),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text('إضافة', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller,
+      String label,
+      IconData icon, {
+        bool isNumber = false,
+      }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      style: const TextStyle(color: Colors.white),
+      textAlign: TextAlign.right,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+        prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.7)),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.1),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF60A5FA)),
+        ),
+      ),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'هذا الحقل مطلوب';
+        }
+        return null;
+      },
+    );
+  }
+
+  // ✅ ديالوج تأكيد الحذف
+  void _showDeleteConfirmDialog(BuildContext context, String serviceId, String serviceTitle) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'تأكيد الحذف',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.right,
+        ),
+        content: Text(
+          'هل أنت متأكد من حذف الخدمة "$serviceTitle"؟',
+          style: const TextStyle(color: Colors.white70),
+          textAlign: TextAlign.right,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء', style: TextStyle(color: Colors.white70)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await _deleteService(serviceId);
+              if (context.mounted) Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFEF4444),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text('حذف', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _RequestCard extends StatefulWidget {
@@ -405,7 +624,6 @@ class _RequestCardState extends State<_RequestCard>
             borderRadius: BorderRadius.circular(24),
             child: Column(
               children: [
-                // Status indicator bar
                 Container(
                   height: 4,
                   decoration: BoxDecoration(
@@ -422,7 +640,6 @@ class _RequestCardState extends State<_RequestCard>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Top Row: Status & Menu
                       Row(
                         children: [
                           _buildStatusChip(status, color),
@@ -431,8 +648,6 @@ class _RequestCardState extends State<_RequestCard>
                         ],
                       ),
                       const SizedBox(height: 16),
-
-                      // Service Title
                       Row(
                         children: [
                           Container(
@@ -475,8 +690,6 @@ class _RequestCardState extends State<_RequestCard>
                         ],
                       ),
                       const SizedBox(height: 16),
-
-                      // User Info
                       Row(
                         children: [
                           Container(
@@ -519,8 +732,6 @@ class _RequestCardState extends State<_RequestCard>
                         ],
                       ),
                       const SizedBox(height: 16),
-
-                      // Date
                       Row(
                         children: [
                           Container(
@@ -562,8 +773,6 @@ class _RequestCardState extends State<_RequestCard>
                           ),
                         ],
                       ),
-
-                      // Expandable Details
                       if (widget.data['description'] != null ||
                           widget.data['phone'] != null) ...[
                         const SizedBox(height: 12),
@@ -658,7 +867,7 @@ class _RequestCardState extends State<_RequestCard>
   Widget _buildPopupMenu(String currentStatus) {
     final items = [
       _StatusItem('approved', 'مقبول', Icons.check_circle_rounded, const Color(0xFF22C55E)),
-      _StatusItem('rejected', 'مرفوض', Icons.cancel_rounded, const Color(0xFFEF4444)),
+      _StatusItem('rejected', 'مرفوض', Icons.cancel_rounded, const Color(0xFFCB1414)),
       _StatusItem('review', 'تمت المراجعة', Icons.visibility_rounded, const Color(0xFF3B82F6)),
       _StatusItem('completed', 'تم اكتمال الطلب', Icons.task_alt_rounded, const Color(0xFF14B8A6)),
       _StatusItem('failed', 'فشل الطلب', Icons.error_rounded, const Color(0xFF6B7280)),
